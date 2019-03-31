@@ -26,7 +26,7 @@ $ pip3 install time    // For the time.sleep function
 #### Connection to Geth node
 
 ___________________
-(Documentation for node connession)[https://web3py.readthedocs.io/en/stable/providers.html#choosing-provider]
+[Documentation for node connession](https://web3py.readthedocs.io/en/stable/providers.html#choosing-provider)
 ___________________
 
 
@@ -42,7 +42,7 @@ w3.isConnected()
 
 To interact with Rinkeby node and authorize transactions it is necessary to authentificate through the usage of account private keys.
 _________________________________
-(Source decrypt your private key)[https://web3py.readthedocs.io/en/stable/web3.eth.account.html]
+[Source decrypt your private key](https://web3py.readthedocs.io/en/stable/web3.eth.account.html)
 ________________________________
 
 In order to do that we decided to extract the ```.json``` file containing the informations regarding the private keys of the account of interest through the following method
@@ -57,7 +57,7 @@ with open('~/.ethereum/rinkeby/keystore/<Account encrypted key; i.e. UTC--2019-0
 
 Once the connection to the node has been established and the private keys extracted it is possible to define a function leveraging the web3 API to transfer Ethereum coins from one account to the next.
 
-The code looks as follows, and especially important is to set the ```chainid``` correctly. A list referencing ```chainid``` is available at (ChainID link)[https://ethereum.stackexchange.com/questions/17051/how-to-select-a-network-id-or-is-there-a-list-of-network-ids]. In our case as we work on ```Rinkeby``` test network we selected a ```chainid``` of 4.
+The code looks as follows, and especially important is to set the ```chainid``` correctly. A list referencing ```chainid``` is available at [ChainID link](https://ethereum.stackexchange.com/questions/17051/how-to-select-a-network-id-or-is-there-a-list-of-network-ids). In our case as we work on ```Rinkeby``` test network we selected a ```chainid``` of 4.
 
 ```
 def send_ether_to_contract(amount_in_ether, wallet_address, contract_address, wallet_private_key):
