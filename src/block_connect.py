@@ -52,7 +52,7 @@ if connected and w3.version.node.startswith('Geth'):
 # Extract private key. Make sure to select the correct account.
 with open('/home/mhassan/.ethereum/rinkeby/keystore/UTC--2019-03-30T11-11-56.210678255Z--903935ee0a8ed552d50523ebf465a8025c75c4cb') as keyfile:
     encrypted_key = keyfile.read()
-    private_key_account1 = w3.eth.account.decrypt(encrypted_key, 'Bianca&&007')
+    private_key_account1 = w3.eth.account.decrypt(encrypted_key, 'YOUR PSSWD')
 
 # Send coins
 
