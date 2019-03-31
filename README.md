@@ -99,3 +99,8 @@ def send_ether_to_contract(amount_in_ether, wallet_address, contract_address, wa
     return {'status': 'added', 'txn_receipt': txn_receipt}
 ```
 
+Finally to execute the Ethereum transfer you can simply enter the necessary informations, also leveraging the w3 opened connession to select the account of interest. Necessary at this point is nonetheless that you enter the decrypted private key of the account executing the transfer
+
+```
+send_ether_to_contract(1, w3.eth.accounts[0], w3.eth.accounts[1], wallet_private_key=private_key_account1)
+```
