@@ -20,7 +20,19 @@ $ pip3 install web3    // Download web3 to make use of javascript web3 API
 
 $ pip3 isntall py-solc // To install python Solidity compiler
 
-$ pip3 install time    // For the time.sleep function
+$ pip3 install time    // For the time.sleep function in order to wait for the necessary mining time
+
+$ pip3 install python-forecastio // to use darkspy API and download weather data.
+```
+
+Moreover the python-solidity compiler package is dependent on the solidity compiler to be downloaded on the machine you are executing the program. To download the compiler you can choose one of the options available at [Solidity Compilers](https://solidity.readthedocs.io/en/v0.5.3/installing-solidity.html).
+
+Important is however to notice that py-solc cannot synch with the newest Solidity compilers. We decided therefore to download the version 4.0.25 of the solidity compiler which is compatible with py-solc.
+
+```
+python -m solc.install v0.4.25
+
+cp $HOME/.py-solc/solc-v0.4.25/bin/solc ~/venv/bin/       // copy the downloaded compiler to the virtual environment so that it is accessible.
 ```
 
 #### Connection to Geth node
@@ -35,7 +47,7 @@ Using Geth Node Server it is possible to auto-connect to the node in automatic w
 ```
 from web3.auto import w3
 
-w3.isConnected()
+w3.isConnected() ## check if automatic connession successful.
 ```
 
 #### Extract your private key
@@ -104,3 +116,20 @@ Finally to execute the Ethereum transfer you can simply enter the necessary info
 ```
 send_ether_to_contract(1, w3.eth.accounts[0], w3.eth.accounts[1], wallet_private_key=private_key_account1)
 ```
+
+
+### Simple Weather Smart Contract
+
+We decided finally to implement a simple smart contract leveraging the realized weather in a given location. The idea is to
+connect through the **darkspy weather API**, get the actual weather and the apparent weather on a given location and to
+execute a smart contract that transfer one ETH coin to the holder of the contract if the current weather is smaller equal to the
+perceived weather at the selected location. We decided further to executing the contract each day at noon and midnight running a cornjob
+on a DigitalOcean server.
+
+#### Darkspy API
+
+In order to leverage the darkspy API and download weather data it is necessary to register and obtain an API key.
+
+______________
+(darkspy API)[https://darksky.net/dev]
+______________
