@@ -7,7 +7,7 @@ import os
 from web3.auto import w3
 
 import logging                   # for logging documentation
-from web3 import Web3            # to connect to the Ethereum node
+# from web3 import Web3            # to connect to the Ethereum node
 # from web3.contract import ConciseContract  # boohhh
 
 from solc import compile_files   # to compile Solidity code.
@@ -47,6 +47,7 @@ with open(path_credentials, "r") as file:
 # Save Api key
 dark_api_key = creds['API_KEY']
 
+
 ####################
 # Get weather data #
 ####################
@@ -76,10 +77,21 @@ logger.info(connected)
 if connected and w3.version.node.startswith('Geth'):
     enode = w3.admin.nodeInfo['enode']
 
+######################################################################
+# Save Ethereum Wallet Accounts Passwords and store the private keys #
+######################################################################
+
+path_psswds = "/home/mhassan/Scrivania/ETH-Solidity/wallet.json"
+
+# Import your API credentials
+with open(path_psswds, "r") as file:
+    psswds = json.load(file)
+
 # Extract private key. Make sure to select the correct account.
 with open('/home/mhassan/.ethereum/rinkeby/keystore/UTC--2019-04-18T16-09-11.741712930Z--a881e6b09456f7c4800e155c0f8acd9d9ec02f80') as keyfile:
     encrypted_key = keyfile.read()
-    private_key_account1 = w3.eth.account.decrypt(encrypted_key, 'YOUR PSSWD')
+    private_key_account1 = w3.eth.account.decrypt(
+        encrypted_key, psswds['Account1_PSSWD'])
 
 ##############
 # Send coins #
