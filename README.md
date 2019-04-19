@@ -152,3 +152,55 @@ temp = current_weather.temperature * 100
 
 apparent_temp = current_weather.apparentTemperature * 100
 ```
+
+Given the actual weather realization and the apparent weather it is possible to compile a solidity contract in the python script
+through the py-solc package installed and execute it by signing the trasaction with your private key and upload it on the public blockchain ledger.
+
+```
+# Compile Contract
+contracts = compile_files(
+    ['/home/mhassan/Scrivania/ETH-Solidity/src/weather.sol'])
+
+# Save .json and binary code for the compiled contract.
+contract = w3.eth.contract(
+    abi=contracts['/home/mhassan/Scrivania/ETH-Solidity/src/weather.sol:Weather_transfer']['abi'],
+    bytecode=contracts['/home/mhassan/Scrivania/ETH-Solidity/src/weather.sol:Weather_transfer']['bin']
+)
+
+## Save private key and address
+private_key = w3.eth.account.privateKeyToAccount(private_key_account1)
+
+construct_txn = contract.constructor().buildTransaction(
+    {'from': w3.eth.accounts[0],
+     'chainId': 4, ## Is rinkeby test network
+     'nonce': w3.eth.getTransactionCount(private_key.address)})
+
+# Authentificate the transaction with the private key of the user.
+signed_txn = private_key.signTransaction(construct_txn)
+
+# Execute the smart contract
+txn_hash = w3.eth.sendRawTransaction(signed_txn.rawTransaction)
+
+# Wait for the mining and save the transaction hash where the contract will be deployed on the blockchain
+txn_receipt = w3.eth.waitForTransactionReceipt(txn_hash)
+```
+
+Given the above it is then possible to deploy the contract and call its functions, in the specific the temperature_send function
+that transfers ETH coins according to the actual vs. perceived weather as described above.
+
+```
+# Create the contract instance with the newly-deployed address
+weather = w3.eth.contract(
+    address=txn_receipt.contractAddress,
+    abi=contracts['/home/mhassan/Scrivania/ETH-Solidity/src/greeting.sol:Weather_transfer']['abi'],
+)
+
+# Execute
+txn = weather.functions.temperature_send(w3.eth.accounts[1], 1,
+                                         temp, apparent_temp).buildTransaction({'from': w3.eth.accounts[0],
+                                                                                'chainId': 4,
+                                                                                'nonce': w3.eth.getTransactionCount(private_key.address)})
+
+signed = w3.eth.account.signTransaction(txn, private_key_account1)
+txn_hash = w3.eth.sendRawTransaction(signed.rawTransaction)
+```
