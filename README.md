@@ -153,6 +153,8 @@ temp = current_weather.temperature * 100
 apparent_temp = current_weather.apparentTemperature * 100
 ```
 
+#### Smart Contract - Compile and Execute
+
 Given the actual weather realization and the apparent weather it is possible to compile a solidity contract in the python script
 through the py-solc package installed and execute it by signing the trasaction with your private key and upload it on the public blockchain ledger.
 
