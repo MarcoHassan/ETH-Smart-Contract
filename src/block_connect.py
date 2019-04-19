@@ -6,8 +6,8 @@
 import os
 from web3.auto import w3
 
-import logging                    # for logging documentation
-from web3 import Web3             # to connect to the Ethereum node
+import logging                   # for logging documentation
+from web3 import Web3            # to connect to the Ethereum node
 # from web3.contract import ConciseContract  # boohhh
 
 from solc import compile_files   # to compile Solidity code.
@@ -16,6 +16,8 @@ from solc import compile_files   # to compile Solidity code.
 import time
 
 import json                      # to transfer info via .json
+
+import forecastio                # to use darkspy API and get current weather data
 
 ###################
 ## Logger Set up ##
@@ -32,34 +34,56 @@ hdlr.setFormatter(formatter)
 logger.addHandler(hdlr)
 logger.setLevel(logging.INFO)  # to get information from info and above
 
+#############################################
+# Save Dark Spy Api key to get weather data #
+#############################################
+
+path_credentials = "/home/mhassan/Scrivania/ETH-Solidity/darkspy.json"
+
+# Import your API credentials
+with open(path_credentials, "r") as file:
+    creds = json.load(file)
+
+# Save Api key
+dark_api_key = creds['API_KEY']
+
+####################
+# Get weather data #
+####################
+
+# Insert the coordinates of the city of choice. (Here Rome (IT)).
+lat = 41.89193
+lng = 12.51133
+
+forecast = forecastio.load_forecast(dark_api_key, lat, lng)
+
+current_weather = forecast.currently()
+
+# As solidity language does not support floaters to guarantee consistency among the blocks multiply the number by 100 to always obtain integers.
+temp = current_weather.temperature * 100
+
+apparent_temp = current_weather.apparentTemperature * 100
+
 #################
 ## Connection  ##
 #################
 
-# Connect to blockchain
+# Check if web3.auto managed to autoconnect to end node.
 connected = w3.isConnected()
-
 logger.info(connected)
 
 # Get Geth endnode.
 if connected and w3.version.node.startswith('Geth'):
     enode = w3.admin.nodeInfo['enode']
 
-# Get Geth server IP and port
-#help_list = enode.split('@')
-
-# Connect to Geth node over the network
-# web3 = Web3(WebsocketProvider("ws://" + help_list[1])
-
-# web3=Web3(WebsocketProvider('ws://127.0.0.1:8546'))
-# THE ABOVE IS NOT NECESSARY. ALREADY CONNECTED TO THE ENDNODE AUTOMATICALLY.
-
 # Extract private key. Make sure to select the correct account.
-with open('/home/mhassan/.ethereum/rinkeby/keystore/UTC--2019-03-30T11-11-56.210678255Z--903935ee0a8ed552d50523ebf465a8025c75c4cb') as keyfile:
+with open('/home/mhassan/.ethereum/rinkeby/keystore/UTC--2019-04-18T16-09-11.741712930Z--a881e6b09456f7c4800e155c0f8acd9d9ec02f80') as keyfile:
     encrypted_key = keyfile.read()
-    private_key_account1 = w3.eth.account.decrypt(encrypted_key, 'Password')
+    private_key_account1 = w3.eth.account.decrypt(encrypted_key, 'YOUR PSSWD')
 
-# Send coins
+##############
+# Send coins #
+##############
 
 
 def send_ether_to_contract(amount_in_ether, wallet_address, contract_address, wallet_private_key):
@@ -86,11 +110,9 @@ def send_ether_to_contract(amount_in_ether, wallet_address, contract_address, wa
     txn_receipt = None
     count = 0
     while txn_receipt is None and (count < 30):
-
         txn_receipt = w3.eth.getTransactionReceipt(txn_hash)
-
         print(txn_receipt)
-
+        count += 10
         time.sleep(10)
 
     if txn_receipt is None:
@@ -122,13 +144,13 @@ private_key = w3.eth.account.privateKeyToAccount(private_key_account1)
 construct_txn = contract.constructor().buildTransaction(
     {'from': w3.eth.accounts[0],
      'chainId': 4,
-     'nonce': w3.eth.getTransactionCount(private_key.address), })
+     'nonce': w3.eth.getTransactionCount(private_key.address)})
 
 # Authentificate the transaction with the private key of the user.
-signed = private_key.signTransaction(construct_txn)
+signed_txn = private_key.signTransaction(construct_txn)
 
 # Execute the smart contract
-txn_hash = w3.eth.sendRawTransaction(signed.rawTransaction)
+txn_hash = w3.eth.sendRawTransaction(signed_txn.rawTransaction)
 
 # Wait for the mining and save the transaction hash where the contract will be deployed on the blockchain
 txn_receipt = w3.eth.waitForTransactionReceipt(txn_hash)
@@ -157,3 +179,50 @@ txn_hash = w3.eth.sendRawTransaction(signed.rawTransaction)
 print('Updated contract greeting: {}'.format(
     greeter.functions.greet().call()
 ))
+
+
+###############################
+# Try simple weather contract #
+###############################
+
+contracts = compile_files(
+    ['/home/mhassan/Scrivania/ETH-Solidity/src/weather.sol'])
+
+contract = w3.eth.contract(
+    abi=contracts['/home/mhassan/Scrivania/ETH-Solidity/src/weather.sol:Weather_transfer']['abi'],
+    bytecode=contracts['/home/mhassan/Scrivania/ETH-Solidity/src/weather.sol:Weather_transfer']['bin']
+)
+
+private_key = w3.eth.account.privateKeyToAccount(private_key_account1)
+
+construct_txn = contract.constructor().buildTransaction(
+    {'from': w3.eth.accounts[0],
+     'chainId': 4,
+     'nonce': w3.eth.getTransactionCount(private_key.address)})
+
+# Authentificate the transaction with the private key of the user.
+signed_txn = private_key.signTransaction(construct_txn)
+
+# Execute the smart contract
+txn_hash = w3.eth.sendRawTransaction(signed_txn.rawTransaction)
+
+# Wait for the mining and save the transaction hash where the contract will be deployed on the blockchain
+txn_receipt = w3.eth.waitForTransactionReceipt(txn_hash)
+
+# Create the contract instance with the newly-deployed address
+weather = w3.eth.contract(
+    address=txn_receipt.contractAddress,
+    abi=contracts['/home/mhassan/Scrivania/ETH-Solidity/src/greeting.sol:Weather_transfer']['abi'],
+)
+
+# Execute
+txn = weather.functions.temperature_send(w3.eth.accounts[1], 1,
+                                         temp, apparent_temp).buildTransaction({'from': w3.eth.accounts[0],
+                                                                                'chainId': 4,
+                                                                                'nonce': w3.eth.getTransactionCount(private_key.address)})
+
+signed = w3.eth.account.signTransaction(txn, private_key_account1)
+txn_hash = w3.eth.sendRawTransaction(signed.rawTransaction)
+
+w3.eth.getBalance(w3.eth.accounts[0])
+w3.eth.getBalance(w3.eth.accounts[1])
