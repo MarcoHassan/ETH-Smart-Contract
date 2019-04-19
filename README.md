@@ -1,4 +1,4 @@
-## Step 1
+## Configuration
 
 Create python virtual environment where to download and save the packages of use.
 
@@ -117,6 +117,7 @@ Finally to execute the Ethereum transfer you can simply enter the necessary info
 send_ether_to_contract(1, w3.eth.accounts[0], w3.eth.accounts[1], wallet_private_key=private_key_account1)
 ```
 
+## Contract Example
 
 ### Simple Weather Smart Contract
 
@@ -131,5 +132,23 @@ on a DigitalOcean server.
 In order to leverage the darkspy API and download weather data it is necessary to register and obtain an API key.
 
 ______________
-(darkspy API)[https://darksky.net/dev]
+[darkspy API](https://darksky.net/dev)
 ______________
+
+Given the API it is possible to simply withdraw the data inserting the coordinates for the city of interest and save the current realized and
+perceived weather.
+
+```
+# Insert the coordinates of the city of choice. (Here Rome (IT)).
+lat = 41.89193
+lng = 12.51133
+
+forecast = forecastio.load_forecast(dark_api_key, lat, lng)
+
+current_weather = forecast.currently()
+
+# As solidity language does not support floaters to guarantee consistency among the blocks multiply the number by 100 to always obtain integers.
+temp = current_weather.temperature * 100
+
+apparent_temp = current_weather.apparentTemperature * 100
+```
