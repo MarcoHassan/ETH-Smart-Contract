@@ -1,3 +1,31 @@
+# Ethereum Project
+
+This is a project for the __Advanced Numerical Methods & Data Analysis__ course at the University of St. Gallen.
+
+In the project we decided to create an auction contract where people can bid to get the right on a 0.5 Ethereum
+transfer if the realized temperature in ```Rome``` is higher than the perceived temperature in the same city at a given hour.
+
+In order for to implement the above we leverage the **Solidity** language to write two smart contracts, one
+defining the conditions of the auction and a second to define the 0.5 Ethereum transfer to the auction higher bidder.
+Moreover we leverage ```python scripts``` in order to connect to the Ethereum blockchain through the web3.js API.
+
+In the specific the project structure can be summarized as follows and will be explained in detail in the sections below:
+
+1. Install ```geth```, run an node on the rinkeby testnet and create accounts through web3.js API.
+
+2. Get an API key from ```darkspy``` to withdraw actual and perceived weather at a chosen location and install further python packages.
+
+3. Write Solidity Scripts.
+
+4. Deploy the weather contracts specifying the Ethereum transfer to the highest bidder.
+
+5. Deploy the auction contract starting the auction.
+
+6. Run the ```deploy.py``` python script to check whether the bidding period is still open and automatically transfer the 0.5 Ethereum coins to the highest bidder if the auction time is over.
+
+## Geth Installation and Configuration
+
+
 ## Configuration
 
 Create python virtual environment where to download and save the packages of use.
