@@ -1,6 +1,6 @@
 # Ethereum Project
 
-This is a project for the __Advanced Numerical Methods & Data Analysis__ course at the University of St. Gallen.
+This is a project for the _Advanced Numerical Methods & Data Analysis_ course at the University of St. Gallen.
 
 In the project we decided to create an auction contract where people can bid to get the right on a 0.5 Ethereum
 transfer if the realized temperature in ```Rome``` is higher than the perceived temperature in the same city at a given hour.
