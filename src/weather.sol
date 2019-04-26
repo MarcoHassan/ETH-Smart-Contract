@@ -1,25 +1,29 @@
 pragma solidity ^0.4.22;
 
-contract Weather_transfer {
-    // The keyword "public" makes those variables
-    // easily readable from outside.
-    address public sender;
-    mapping (address => uint) public balances;
 
-    function temperature_send(address receiver, uint amount,
-        	              int256 temperature, int256 apparent) public
+contract lower_Weather_transfer 
+
+    {
+
+    function temperature_send(address _receiver,
+        	              int256 temperature, int256 apparent) public payable
 			  {
-			  if (temperature <= apparent)
-			     {
-     		      require(amount <= balances[msg.sender], "Insufficient balance.");
-			      balances[msg.sender] -= amount;
-			      balances[receiver] += amount;
-			     } else
-			     {
-     			  require(amount <= balances[receiver], "Insufficient balance.");
-			      balances[receiver] -= amount;
-			      balances[sender] += amount;
-			     }
+			  assert(temperature <= apparent);
+			  require(msg.value <= msg.sender.balance, "Insufficient balance.");
+			  _receiver.transfer(msg.value);
 			  }
-}
+    }
+			
 
+contract higher_Weather_transfer 
+
+    {
+    function temperature_send(address _receiver,
+        	              int256 temperature, int256 apparent) public payable
+			  {
+			  assert(temperature > apparent);
+			  require(msg.value <= msg.sender.balance, "Insufficient balance.");
+			  _receiver.transfer(msg.value);
+			  }
+    }
+		
