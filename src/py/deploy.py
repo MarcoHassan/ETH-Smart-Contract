@@ -34,7 +34,7 @@ logger.setLevel(logging.INFO)  # to get information from info and above
 # Save Dark Spy Api key to get weather data #
 #############################################
 
-path_credentials = "/home/mhassan/Scrivania/ETH-Solidity/darkspy.json"
+path_credentials = "/home/mhassan/Scrivania/ETH-Solidity/json/darkspy.json"
 
 # Import your API credentials
 with open(path_credentials, "r") as file:
@@ -60,12 +60,12 @@ current_weather = forecast.currently()
 temp = current_weather.temperature * 100
 
 temp = int(temp)
-temp
+logger.info("Actual temperature in Rome is: " + temp)
 
 apparent_temp = current_weather.apparentTemperature * 100
 
 apparent_temp = int(apparent_temp)
-apparent_temp
+logger.info("Perceived temperature in Rome is: " + apparent_temp)
 
 #################
 ## Connection  ##
@@ -88,7 +88,7 @@ logger.info(connected)
 # Save Ethereum Wallet Accounts Passwords and store the private keys #
 ######################################################################
 
-path_psswds = "/home/mhassan/Scrivania/ETH-Solidity/wallet.json"
+path_psswds = "/home/mhassan/Scrivania/ETH-Solidity/json/wallet.json"
 
 # Import your API credentials
 with open(path_psswds, "r") as file:
@@ -112,7 +112,7 @@ with open('/home/mhassan/.ethereum/keystore/UTC--2019-04-22T07-18-58.389017440Z-
 ###########################
 
 # Parse weather_contract dictionary to .json file
-with open('/home/mhassan/Scrivania/ETH-Solidity/auction.json', 'r') as infile:
+with open('/home/mhassan/Scrivania/ETH-Solidity/json/auction.json', 'r') as infile:
     auction = json.load(infile)
 
 auction_con = web3.eth.contract(
@@ -158,7 +158,7 @@ while ended == False:
 ################################################################
 
 # Parse weather_contract dictionary to .json file
-with open('/home/mhassan/Scrivania/ETH-Solidity/lower_weather_transfer.json', 'r') as infile:
+with open('/home/mhassan/Scrivania/ETH-Solidity/json/lower_weather_transfer.json', 'r') as infile:
     lower_weather = json.load(infile)
 
 weather_lower = web3.eth.contract(

@@ -13,8 +13,6 @@ import time
 
 import json                      # to transfer info via .json
 
-import forecastio                # to use darkspy API and get current weather data
-
 ###################
 ## Logger Set up ##
 ###################
@@ -48,7 +46,7 @@ logger.info(connected)
 # Save Ethereum Wallet Accounts Passwords and store the private keys #
 ######################################################################
 
-path_psswds = "/home/mhassan/Scrivania/ETH-Solidity/wallet.json"
+path_psswds = "/home/mhassan/Scrivania/ETH-Solidity/json/wallet.json"
 
 # Import your API credentials
 with open(path_psswds, "r") as file:
@@ -118,11 +116,11 @@ send_ether_to_contract(
 #####################################
 
 contracts = compile_files(
-    ['/home/mhassan/Scrivania/ETH-Solidity/src/weather.sol'])
+    ['/home/mhassan/Scrivania/ETH-Solidity/src/sol/weather.sol'])
 
 contract = web3.eth.contract(
-    abi=contracts['/home/mhassan/Scrivania/ETH-Solidity/src/weather.sol:lower_Weather_transfer']['abi'],
-    bytecode=contracts['/home/mhassan/Scrivania/ETH-Solidity/src/weather.sol:lower_Weather_transfer']['bin']
+    abi=contracts['/home/mhassan/Scrivania/ETH-Solidity/src/sol/weather.sol:lower_Weather_transfer']['abi'],
+    bytecode=contracts['/home/mhassan/Scrivania/ETH-Solidity/src/sol/weather.sol:lower_Weather_transfer']['bin']
 )
 
 private_key = web3.eth.account.privateKeyToAccount(private_key_account1)
@@ -144,12 +142,12 @@ txn_receipt = web3.eth.waitForTransactionReceipt(txn_hash)
 # Save contract 'address',  'abi' and 'bytecode' deploying the contract at a later stage.
 weather_contract = {}
 
-weather_contract['abi'] = contracts['/home/mhassan/Scrivania/ETH-Solidity/src/weather.sol:lower_Weather_transfer']['abi']
+weather_contract['abi'] = contracts['/home/mhassan/Scrivania/ETH-Solidity/src/sol/weather.sol:lower_Weather_transfer']['abi']
 
 weather_contract['address'] = txn_receipt.contractAddress
 
 # Parse weather_contract dictionary to .json file
-with open('/home/mhassan/Scrivania/ETH-Solidity/lower_weather_transfer.json', 'w') as outfile:
+with open('/home/mhassan/Scrivania/ETH-Solidity/json/lower_weather_transfer.json', 'w') as outfile:
     json.dump(weather_contract, outfile)
 
 
@@ -158,11 +156,11 @@ with open('/home/mhassan/Scrivania/ETH-Solidity/lower_weather_transfer.json', 'w
 ########################################################
 
 contracts = compile_files(
-    ['/home/mhassan/Scrivania/ETH-Solidity/src/weather.sol'])
+    ['/home/mhassan/Scrivania/ETH-Solidity/src/sol/weather.sol'])
 
 contract = web3.eth.contract(
-    abi=contracts['/home/mhassan/Scrivania/ETH-Solidity/src/weather.sol:higher_Weather_transfer']['abi'],
-    bytecode=contracts['/home/mhassan/Scrivania/ETH-Solidity/src/weather.sol:higher_Weather_transfer']['bin']
+    abi=contracts['/home/mhassan/Scrivania/ETH-Solidity/src/sol/weather.sol:higher_Weather_transfer']['abi'],
+    bytecode=contracts['/home/mhassan/Scrivania/ETH-Solidity/src/sol/weather.sol:higher_Weather_transfer']['bin']
 )
 
 private_key = web3.eth.account.privateKeyToAccount(private_key_account1)
@@ -184,10 +182,10 @@ txn_receipt = web3.eth.waitForTransactionReceipt(txn_hash)
 # Save contract 'address',  'abi' and 'bytecode' deploying the contract at a later stage.
 weather_contract = {}
 
-weather_contract['abi'] = contracts['/home/mhassan/Scrivania/ETH-Solidity/src/weather.sol:higher_Weather_transfer']['abi']
+weather_contract['abi'] = contracts['/home/mhassan/Scrivania/ETH-Solidity/src/sol/weather.sol:higher_Weather_transfer']['abi']
 
 weather_contract['address'] = txn_receipt.contractAddress
 
 # Parse weather_contract dictionary to .json file
-with open('/home/mhassan/Scrivania/ETH-Solidity/higher_weather_transfer.json', 'w') as outfile:
+with open('/home/mhassan/Scrivania/ETH-Solidity/json/higher_weather_transfer.json', 'w') as outfile:
     json.dump(weather_contract, outfile)

@@ -13,7 +13,6 @@ import time
 
 import json                      # to transfer info via .json
 
-import forecastio                # to use darkspy API and get current weather data
 
 ###################
 ## Logger Set up ##
@@ -52,7 +51,7 @@ logger.info(connected)
 # Save Ethereum Wallet Accounts Passwords and store the private keys #
 ######################################################################
 
-path_psswds = "/home/mhassan/Scrivania/ETH-Solidity/wallet.json"
+path_psswds = "/home/mhassan/Scrivania/ETH-Solidity/json/wallet.json"
 
 # Import your API credentials
 with open(path_psswds, "r") as file:
@@ -76,11 +75,11 @@ with open('/home/mhassan/.ethereum/keystore/UTC--2019-04-22T07-18-58.389017440Z-
 #############################
 
 contracts = compile_files(
-    ['/home/mhassan/Scrivania/ETH-Solidity/src/auction.sol'])
+    ['/home/mhassan/Scrivania/ETH-Solidity/src/sol/auction.sol'])
 
 contract = web3.eth.contract(
-    abi=contracts['/home/mhassan/Scrivania/ETH-Solidity/src/auction.sol:SimpleAuction']['abi'],
-    bytecode=contracts['/home/mhassan/Scrivania/ETH-Solidity/src/auction.sol:SimpleAuction']['bin']
+    abi=contracts['/home/mhassan/Scrivania/ETH-Solidity/src/sol/auction.sol:SimpleAuction']['abi'],
+    bytecode=contracts['/home/mhassan/Scrivania/ETH-Solidity/src/sol/auction.sol:SimpleAuction']['bin']
 )
 
 private_key = web3.eth.account.privateKeyToAccount(private_key_account1)
@@ -105,10 +104,12 @@ txn_receipt = web3.eth.waitForTransactionReceipt(txn_hash)
 # Save contract 'address',  'abi' and 'bytecode' deploying the contract at a later stage.
 auction_contract = {}
 
-auction_contract['abi'] = contracts['/home/mhassan/Scrivania/ETH-Solidity/src/auction.sol:SimpleAuction']['abi']
+auction_contract['abi'] = contracts['/home/mhassan/Scrivania/ETH-Solidity/src/sol/auction.sol:SimpleAuction']['abi']
 
 auction_contract['address'] = txn_receipt.contractAddress
 
 # Parse weather_contract dictionary to .json file
-with open('/home/mhassan/Scrivania/ETH-Solidity/auction.json', 'w') as outfile:
+with open('/home/mhassan/Scrivania/ETH-Solidity/json/auction.json', 'w') as outfile:
     json.dump(auction_contract, outfile)
+
+logger.info("Auction was opened")
