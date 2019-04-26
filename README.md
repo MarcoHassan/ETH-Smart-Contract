@@ -109,7 +109,9 @@ __________
 
 ## Connection to Geth node
 
-At this stage all of the necessary libraries are downloaded and we turn to the python web3 API to connect to the running node.
+At this stage all of the necessary libraries are downloaded and the solidity scripts available.
+
+We turn to the python web3 API to connect to the running node.
 
 A documenation for the various connession possibilities is available at
 ___________________
@@ -124,20 +126,24 @@ the node should be specified.
 web3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8080"))
 ```
 
-#### Extract your private key
+Once we are connected to the Ethereum blockchain node it is possible to interact with it through the web3 API.
 
-To interact with Rinkeby node and authorize transactions it is necessary to authentificate through the usage of account private keys.
+We extract first the private keys of the two accounts in order to authentificate and interact with the Rinkeby node and authorize transactions.
+
 _________________________________
 [Source decrypt your private key](https://web3py.readthedocs.io/en/stable/web3.eth.account.html)
 ________________________________
-
-In order to do that we decided to extract the ```.json``` file containing the informations regarding the private keys of the account of interest through the following method
 
 ```
 with open('~/.ethereum/rinkeby/keystore/<Account encrypted key; i.e. UTC--2019-03-30T11-11-56.210678255Z--903935ee0a8ed552d50523ebf465a8025c75c4cb>') as keyfile:
     encrypted_key = keyfile.read()
     private_key_account1 = w3.eth.account.decrypt(encrypted_key, 'YOUR ACCOUNT PSSWD')
 ```
+
+#### Python Script 1 - ETH Conditional Transfer Contracts
+
+**continue tomorrow...**
+
 
 #### Transfer of ETH coins
 
