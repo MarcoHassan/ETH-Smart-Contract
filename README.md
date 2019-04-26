@@ -25,6 +25,24 @@ In the specific the project structure can be summarized as follows and will be e
 
 ## Geth Installation and Configuration
 
+We refer to the documenation below to install ```geth```.
+
+__________
+[Geth installation] (https://github.com/ethereum/go-ethereum/wiki/Installing-Geth)
+__________
+
+Once properly installed it is possible to connect a node on the rinkeby test network by running the following command.
+
+```
+geth --rinkeby --datadir=~/.ethereum --port=30304 --cache=2048 --rpc --rpcport=8080 --rpcapi=eth,web3,net,personal --syncmode=light --bootnodes=enode://a24ac7c5484ef4ed0c5eb2d36620ba4e4aa13b8c84684e1b4aab0cebea2ae45cb4d375b77eab56516d34bfbd3c1a833fc51296ff084b770b94fb9028c4d25ccf@52.169.42.101:30303
+```
+This will instantiate the ```.ethereum``` directory in the home directory. This will be of paramount importance as under such directory the blocks will be
+installed and the private keys of the accounts created.
+
+Imporant is moreover to underline the chose ```rpcport```. This is important to remember for the later web3 connession to the running node. Important is
+moreoveer to choose free ports for the communications without inhibiting the smooth communication with other networks.
+
+
 
 ## Configuration
 
