@@ -1,0 +1,3 @@
+Possibility to work with truffle:
+
+https://hackernoon.com/ethereum-smart-contracts-from-zero-to-end-to-end-dapp-ebae43cdf859
