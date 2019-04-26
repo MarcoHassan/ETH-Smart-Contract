@@ -42,25 +42,32 @@ installed and the private keys of the accounts created.
 Imporant is moreover to underline the chose ```rpcport```. This is important to remember for the later web3 connession to the running node. Important is
 moreoveer to choose free ports for the communications without inhibiting the smooth communication with other networks.
 
+Finally, the ```bootnodes``` parameter provided to be of first order importance in our case due to problematic endnodes connection in the light version
+- still experimental at the time of this writing -.
 
+Once the command is run on Linux OS it will automatically download some of the blockchain history. When up to date it is then possible to start developing.
 
-## Configuration
+As a first step we created two accounts by running the following command and entering a corresponding password.
 
-Create python virtual environment where to download and save the packages of use.
+```
+geth --datadir=~/.ethereum account new
+```
+
+## Python Configuration
+
+Once ```geth``` is properly configured we truned to the python dependencies and modules downloads.
+
+Firstly we created python virtual environment where to download and save the packages of use.
 
 ```
 $ virtualenv -p /usr/bin/python3.6 venv
 ```
 
-#### Activate Virtual Environment
+It is then possible to activate the virtual environment and download the depencies
 
 ```
 $ source venv/bin/activate
-```
 
-#### Install necessary Python Modules
-
-```
 $ pip3 install web3    // Download web3 to make use of javascript web3 API
        	       	       // and interact with the Ethereum Blockchain
 
@@ -71,7 +78,7 @@ $ pip3 install time    // For the time.sleep function in order to wait for the n
 $ pip3 install python-forecastio // to use darkspy API and download weather data.
 ```
 
-Moreover the python-solidity compiler package is dependent on the solidity compiler to be downloaded on the machine you are executing the program. To download the compiler you can choose one of the options available at [Solidity Compilers](https://solidity.readthedocs.io/en/v0.5.3/installing-solidity.html).
+The python-solidity compiler package is dependent on the solidity compiler on your local machine. You can choose the compiler version from one of the options available at [Solidity Compilers](https://solidity.readthedocs.io/en/v0.5.3/installing-solidity.html).
 
 Important is however to notice that py-solc cannot synch with the newest Solidity compilers. We decided therefore to download the version 4.0.25 of the solidity compiler which is compatible with py-solc.
 
@@ -81,19 +88,40 @@ python -m solc.install v0.4.25
 cp $HOME/.py-solc/solc-v0.4.25/bin/solc ~/venv/bin/       // copy the downloaded compiler to the virtual environment so that it is accessible.
 ```
 
-#### Connection to Geth node
+## Solidity Code
 
+The three Solidity scripts that backs our program are available under the ```src/sol``` repository in this Github page.
+
+The lower temperature script is the script to transfer Ether to an account to be specified if the
+the realized temperature in a selected location is smaller-equal than the perceived one.
+
+The higher temperature script is the analogy of the first and transfer Ether just when the perceived temperature is lower than the
+realized temperature.
+
+Both are straightforward and an explanation is omitted.
+
+The auction script is a revised verision taken from the offical Solidity tutorial page available at
+
+__________
+[Simple Auction](https://solidity.readthedocs.io/en/v0.4.21/solidity-by-example.html)
+__________
+
+
+## Connection to Geth node
+
+At this stage all of the necessary libraries are downloaded and we turn to the python web3 API to connect to the running node.
+
+A documenation for the various connession possibilities is available at
 ___________________
 [Documentation for node connession](https://web3py.readthedocs.io/en/stable/providers.html#choosing-provider)
 ___________________
 
-
-Using Geth Node Server it is possible to auto-connect to the node in automatic way thanks to the outstanding connectivity API integrated in web3 python method that leverages Javascript web3.js API.
+We decided to connect through the HTTP mode by connecting to the ```rpcport```. If you are running the python script on the same
+machine where your node is running it is then possible to connect on the ```127.0.0.1``` localhost, otherwise the IP of the machine running
+the node should be specified.
 
 ```
-from web3.auto import w3
-
-w3.isConnected() ## check if automatic connession successful.
+web3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8080"))
 ```
 
 #### Extract your private key
