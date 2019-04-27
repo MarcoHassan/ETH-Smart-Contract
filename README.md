@@ -168,25 +168,57 @@ From here on the passages are analogous to the one previously mentioned with the
 
 Finally, we decide to save the ```abi``` and the ```address``` of the deployed function in a created .json file to call the functions of the contracts at a later stage - i.e. when the auction will be instantiated and finished -.
 
+#### Python Script 2 - Auction Initialization
+
+This second script initializes the auction. This means that running the script from the shell you will instantiate a auction for bidding on the
+0,5 ETH transfer conditional on the weather conditions.
+
+The default parameters set in the script are the following:
+
+____________
+beneficiary = first account on the running geth node.
+
+bidding time = three hours
+_____________
 
 
+The two can be adjusted from the user and it is also possible to slightly alter the shell to allow shell parameter definition.
+
+The code is analogous to the one explained in the previous section and a detailed explaination of such is omitted.
+
+It is important moreover to save the ```abi``` and the ```address``` of the contract to interact with the auction contract, place bids, withdraw the bids and terminate the contract once the bidding time has expired.
 
 
+#### Python Script 3 - ETH automatic transfer
 
+Once the auction is running it is possible to run this final script.
 
+This will open the .json files where the auction contract address and ```abi``` documentation is saved, open such contract in web3 and check whether the auction is finished or running.
 
+Once the auction is terminated it will take the saved highest bidder address and automatically transfer 0.5 ```Ether``` from the geth node first account to the address if the actual temperature in Rome is smaller equal than the ```perceived``` one. Finally the beneficiary of the auction, will receive the highest bid from the highest bidder address.
 
-## Contract Example
+As such contract leverages the difference between the perceived and realized temperature in Rome it is necessary to collect the information on python.
 
-### Simple Weather Smart Contract
+We decided to gather the infromation by connecting through the **darkspy weather API** to weather forecast servers and get the information of interest.
 
-We decided finally to implement a simple smart contract leveraging the realized weather in a given location. The idea is to
-connect through the **darkspy weather API**, get the actual weather and the apparent weather on a given location and to
-execute a smart contract that transfer one ETH coin to the holder of the contract if the current weather is smaller equal to the
-perceived weather at the selected location. We decided further to executing the contract each day at noon and midnight running a cornjob
-on a DigitalOcean server.
+#### Bid Example
 
-#### Darkspy API
+Once the auction is running it is possible for the owner of the contract to make the ```abi``` and ```address``` publicly available such that people can connect to it and place bids.
+
+Below is a python code example for placing such bids once the connection to the ethereum blockchain has been established and the contract successfully opened under the name of ```auction_con```.
+
+```
+ txn = auction_con.functions.bid().buildTransaction({'from': web3.eth.accounts[1],
+                                                    'value': web3.toWei(1, 'ether'),
+                                                    'gas': 3000000,
+                                                    'chainId': 4,
+                                                    'nonce': web3.eth.getTransactionCount(web3.eth.accounts[1])})
+
+signed = web3.eth.account.signTransaction(txn, private_key_account2)
+txn_hash = web3.eth.sendRawTransaction(signed.rawTransaction)
+```
+
+#### Darkspy API - comment
 
 In order to leverage the darkspy API and download weather data it is necessary to register and obtain an API key.
 
@@ -212,56 +244,14 @@ temp = current_weather.temperature * 100
 apparent_temp = current_weather.apparentTemperature * 100
 ```
 
-#### Smart Contract - Compile and Execute
+## Final comments and ideas
 
-Given the actual weather realization and the apparent weather it is possible to compile a solidity contract in the python script
-through the py-solc package installed and execute it by signing the trasaction with your private key and upload it on the public blockchain ledger.
+To fully appreciate the project we recommend to run ```geth``` node on a server such that it will be running 24/7 and to instruct a few cronjobs to instantiate the auction and automatically transfer the coins.
 
-```
-# Compile Contract
-contracts = compile_files(
-    ['/home/mhassan/Scrivania/ETH-Solidity/src/weather.sol'])
+For instance, we firstly executed the ```weather.py``` on the server as the script needs to run just a single time. We then set up two cron jobs, one instantiatig the auction by running the ```auction.py``` script at noon.And another cron job running the ```deploy.py``` contract at midnight.
 
-# Save .json and binary code for the compiled contract.
-contract = w3.eth.contract(
-    abi=contracts['/home/mhassan/Scrivania/ETH-Solidity/src/weather.sol:Weather_transfer']['abi'],
-    bytecode=contracts['/home/mhassan/Scrivania/ETH-Solidity/src/weather.sol:Weather_transfer']['bin']
-)
+In this case each day an auction will be instantiated at noon running for three hours where people can place bids to get the right on the 0.5 Ether transfer. Moreover the deploy script will run at noon checking if the difference of realized and perceived temperature in Rome is positive and automatically transfering the coins if the condition of the contract is fullfilled.
 
-## Save private key and address
-private_key = w3.eth.account.privateKeyToAccount(private_key_account1)
+It is clear that the project above is highly scalable. It is theoretically possible to slightly alterate the above and easily shift the ```sports bids``` on the blockchain. A little bit of front-end development would then make the whole user friendly and potentially appetible to the general public.
 
-construct_txn = contract.constructor().buildTransaction(
-    {'from': w3.eth.accounts[0],
-     'chainId': 4, ## Is rinkeby test network
-     'nonce': w3.eth.getTransactionCount(private_key.address)})
-
-# Authentificate the transaction with the private key of the user.
-signed_txn = private_key.signTransaction(construct_txn)
-
-# Execute the smart contract
-txn_hash = w3.eth.sendRawTransaction(signed_txn.rawTransaction)
-
-# Wait for the mining and save the transaction hash where the contract will be deployed on the blockchain
-txn_receipt = w3.eth.waitForTransactionReceipt(txn_hash)
-```
-
-Given the above it is then possible to deploy the contract and call its functions, in the specific the temperature_send function
-that transfers ETH coins according to the actual vs. perceived weather as described above.
-
-```
-# Create the contract instance with the newly-deployed address
-weather = w3.eth.contract(
-    address=txn_receipt.contractAddress,
-    abi=contracts['/home/mhassan/Scrivania/ETH-Solidity/src/greeting.sol:Weather_transfer']['abi'],
-)
-
-# Execute
-txn = weather.functions.temperature_send(w3.eth.accounts[1], 1,
-                                         temp, apparent_temp).buildTransaction({'from': w3.eth.accounts[0],
-                                                                                'chainId': 4,
-                                                                                'nonce': w3.eth.getTransactionCount(private_key.address)})
-
-signed = w3.eth.account.signTransaction(txn, private_key_account1)
-txn_hash = w3.eth.sendRawTransaction(signed.rawTransaction)
-```
+We stay tuned.
