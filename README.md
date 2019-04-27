@@ -218,7 +218,7 @@ signed = web3.eth.account.signTransaction(txn, private_key_account2)
 txn_hash = web3.eth.sendRawTransaction(signed.rawTransaction)
 ```
 
-#### Darkspy API - comment
+## Darkspy API - comment
 
 In order to leverage the darkspy API and download weather data it is necessary to register and obtain an API key.
 
