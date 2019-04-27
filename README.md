@@ -11,7 +11,7 @@ Moreover we leverage ```python scripts``` in order to connect to the Ethereum bl
 
 In the specific the project structure can be summarized as follows and will be explained in detail in the sections below:
 
-1. Install ```geth```, run an node on the rinkeby testnet and create accounts through web3.js API.
+1. Install ```geth```, run an node on the rinkeby testnet and create accounts.
 
 2. Get an API key from ```darkspy``` to withdraw actual and perceived weather at a chosen location and install further python packages.
 
@@ -140,62 +140,41 @@ with open('~/.ethereum/rinkeby/keystore/<Account encrypted key; i.e. UTC--2019-0
     private_key_account1 = w3.eth.account.decrypt(encrypted_key, 'YOUR ACCOUNT PSSWD')
 ```
 
+## Python Scripts
+
+This section briefly introduces and comments the python scripts necessary for running the auction and automatically transfer the coins to the highest bidder.
+
 #### Python Script 1 - ETH Conditional Transfer Contracts
 
-**continue tomorrow...**
+We started the script with a general exercise where we test the connession and the web3 API functions. It consists of a simple function defining
+an ETH transfer between the accounts.
+
+The structure to operate via web3 API on the Ethereum blockchain is simple. We defined first a ```txn_dict``` python dictionary where we specified the parameters of the transfaction, such as the amount of ```ether``` to transfer, the gas price for the fast execution of the contract, the gas limit etc. 
+
+Especially important is to set the ```chainid``` correctly. A list referencing ```chainid``` is available at [ChainID link](https://ethereum.stackexchange.com/questions/17051/how-to-select-a-network-id-or-is-there-a-list-of-network-ids). In our case as we work on ```Rinkeby``` test network we selected a ```chainid``` of 4.
+
+Once the dictionary is properly defined we authentificate the transaction through the sender ```private key``` previously stored and deploy the
+transaction on the blockchain through the ```web3.eth.sendRawTransaction()``` function saving moreover the transaction hash in order to inspect the transaction at a later point on ```rinkeby explorer```.
+
+The final loop waits until the transaction has been mined and returns and error if the mining was unsuccessful.
+
+After this general exercise and the explaination of the most important web3 API functions we turned to the deployment on the blockchain of the two weather contracts conditionally transfering money depending on the difference between the two input parameters.
+
+This is done by compiling the contract at first via the ```compile_files``` function imported from the ```py-solc``` library. This will result in the ```abi``` .json specification of the various contracts implemented in the Solidity scripts and their corresponding bytecodes for running the contracts on ```EVM```.
+
+Given the bytecode and the abi description it was then possible to deploy the contract on the blockchain by leveraging web3 API function ```web3.eth.contract()```.
+
+From here on the passages are analogous to the one previously mentioned with the difference that the parameters of the transaction are specified when contstructing the contract through the ```<contract name>.constructor().buildTransaction()``` web3 function.
+
+Finally, we decide to save the ```abi``` and the ```address``` of the deployed function in a created .json file to call the functions of the contracts at a later stage - i.e. when the auction will be instantiated and finished -.
 
 
-#### Transfer of ETH coins
 
-Once the connection to the node has been established and the private keys extracted it is possible to define a function leveraging the web3 API to transfer Ethereum coins from one account to the next.
 
-The code looks as follows, and especially important is to set the ```chainid``` correctly. A list referencing ```chainid``` is available at [ChainID link](https://ethereum.stackexchange.com/questions/17051/how-to-select-a-network-id-or-is-there-a-list-of-network-ids). In our case as we work on ```Rinkeby``` test network we selected a ```chainid``` of 4.
 
-```
-def send_ether_to_contract(amount_in_ether, wallet_address, contract_address, wallet_private_key):
 
-    amount_in_wei = w3.toWei(amount_in_ether, 'ether')
 
-    nonce = w3.eth.getTransactionCount(wallet_address)
 
-    txn_dict = {
-        'to': contract_address,
-        'value': amount_in_wei,
-        'gas': 2000000,
-        'gasPrice': w3.toWei('40', 'gwei'),
-        'nonce': nonce,
-        'chainId': 4  # 4 is the network ID for Rinkdin test Network
-    }
-
-    # wallet_private_key
-    signed_txn = w3.eth.account.signTransaction(
-        txn_dict, wallet_private_key)
-
-    txn_hash = w3.eth.sendRawTransaction(signed_txn.rawTransaction)
-
-    txn_receipt = None
-    count = 0
-    while txn_receipt is None and (count < 30):
-
-        txn_receipt = w3.eth.getTransactionReceipt(txn_hash)
-
-        print(txn_receipt)
-
-        time.sleep(10)
-
-    if txn_receipt is None:
-        return {'status': 'failed', 'error': 'timeout'}
-
-    logger.info("%d Ethereum were transfered form accound %s to contract %s" % (
-        amount_in_ether, wallet_address, contract_address))
-    return {'status': 'added', 'txn_receipt': txn_receipt}
-```
-
-Finally to execute the Ethereum transfer you can simply enter the necessary informations, also leveraging the w3 opened connession to select the account of interest. Necessary at this point is nonetheless that you enter the decrypted private key of the account executing the transfer
-
-```
-send_ether_to_contract(1, w3.eth.accounts[0], w3.eth.accounts[1], wallet_private_key=private_key_account1)
-```
 
 ## Contract Example
 
