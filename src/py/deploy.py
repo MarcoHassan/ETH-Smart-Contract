@@ -149,7 +149,9 @@ while ended == False:
         ended
     ))
 
-    time.sleep(60)
+    sleep = 60*60
+
+    time.sleep(sleep)
 
 
 ################################################################

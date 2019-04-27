@@ -84,7 +84,7 @@ contract = web3.eth.contract(
 
 private_key = web3.eth.account.privateKeyToAccount(private_key_account1)
 
-three_hours = 120  # 60*60*3
+three_hours = 60*60*3
 
 construct_txn = contract.constructor(_biddingTime=three_hours, _beneficiary=web3.eth.accounts[0]).buildTransaction(
     {
