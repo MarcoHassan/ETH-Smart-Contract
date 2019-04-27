@@ -28,7 +28,7 @@ In the specific the project structure can be summarized as follows and will be e
 We refer to the documenation below to install ```geth```.
 
 __________
-(Geth installation)[https://github.com/ethereum/go-ethereum/wiki/Installing-Geth]
+[Geth installation](https://github.com/ethereum/go-ethereum/wiki/Installing-Geth)
 __________
 
 Once properly installed it is possible to connect a node on the rinkeby test network by running the following command.
