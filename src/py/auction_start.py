@@ -101,6 +101,8 @@ txn_hash = web3.eth.sendRawTransaction(signed_txn.rawTransaction)
 # Wait for the mining and save the transaction hash where the contract will be deployed on the blockchain
 txn_receipt = web3.eth.waitForTransactionReceipt(txn_hash)
 
+time.sleep(15)
+
 # Save contract 'address',  'abi' and 'bytecode' deploying the contract at a later stage.
 auction_contract = {}
 
