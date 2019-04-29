@@ -66,7 +66,7 @@ Explanation omitted. It will follow in the next sections.
 We refer to the documentation below to install ```geth```.
 
 __________
-[Geth installation] (https://github.com/ethereum/go-ethereum/wiki/Installing-Geth)
+[Geth installation](https://github.com/ethereum/go-ethereum/wiki/Installing-Geth)
 __________
 
 Once properly installed it is possible to connect a node on the rinkeby test network by running the following command.
@@ -320,6 +320,7 @@ signed = web3.eth.account.signTransaction(txn, private_key_account2)
 txn_hash = web3.eth.sendRawTransaction(signed.rawTransaction)
 ```
 
+<<<<<<< HEAD
 
 #### Python Script 3 - ETH automatic transfer
 
@@ -373,6 +374,7 @@ apparent_temp = current_weather.apparentTemperature * 100
 
 ## Final comments and ideas
 
+<<<<<<< HEAD
 To fully appreciate the project we recommend to run ```geth``` node on
 a server such that it will be running 24/7 and to instruct a few
 cronjobs to instantiate the auction and automatically transfer the
