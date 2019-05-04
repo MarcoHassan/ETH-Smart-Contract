@@ -1,8 +1,22 @@
+<div align="right">
+Advanced Numerical Methods and Data Analysis - FS19-8,780
+<br>
+University of St. Gallen, 05.05.2019
+<br>
+</div>
+
+-------------
+
+
+
 # Ethereum Project
 
-This is a project for the _Advanced Numerical Methods & Data Analysis_
-course at the University of St. Gallen.
+**Elisa Fleissner** &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  elisa.fleissner@student.unisg.ch <br>
+**Marco Hassan** &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  ... <br>
+**Lars Stauffenegger** &nbsp; &nbsp; &nbsp;lars.stauffenegger@student.unisg.ch  <br>
+**Alexander Steeb** &nbsp;&nbsp; &nbsp; &nbsp; ...  <br>
 
+## Introduction and project overview
 In the project we decided to create an auction contract where people
 can bid to get the right on a 0.5 Ethereum transfer if the realized
 temperature in ```Rome``` is higher than the perceived temperature in
@@ -12,7 +26,7 @@ In order to implement the above we leverage the **Solidity**
 language to write two smart contracts, one defining the conditions of
 the auction and a second to define the 0.5 Ethereum transfer to the
 auction higher bidder.  Moreover we leverage ```python scripts``` in
-order to connect to the Ethereum blockchain through the web3.js API.
+order to connect to the Ethereum blockchain through the ```web3.js``` API.
 
 In the specific the project structure can be summarized as follows and
 will be explained in detail in the sections below:
@@ -20,9 +34,9 @@ will be explained in detail in the sections below:
 1. Install ```geth```, run an node on the rinkeby testnet and create accounts.
 
 2. Get an API key from ```darkspy``` to withdraw actual and perceived
-weather at a chosen location and install further python packages.
+weather information at a chosen location and install further python packages.
 
-3. Write Solidity Scripts.
+3. Write Solidity scripts.
 
 4. Deploy the weather contracts specifying the Ethereum transfer to the highest bidder.
 
@@ -34,10 +48,10 @@ to the highest bidder if the auction time is over.
 
 ## Program Execution
 
-Before entering the details of the code let's briefly discuss the
+Before entering the details of the code, let's briefly discuss the
 nitty-gritty program execution.
 
-#### Step 0: Connect to Ethereum Blockchain via web3 python API
+#### Step 0: Connect to Ethereum blockchain via web3 python API
 
 Explanation omitted. It will follow in the next sections.
 
@@ -47,7 +61,7 @@ Explanation omitted. It will follow in the next sections.
 (virtual environment).../src/py$ python3 weather.py
 ```
 
-#### Step 2: Activate the Auction
+#### Step 2: Activate the auction
 
 ```
 (virtual environment)..../src/py$ python3 auction.py
@@ -61,7 +75,7 @@ Explanation omitted. It will follow in the next sections.
 (virtual environment)..../src/py$ python3 deploy.py
 ```
 
-## Geth Installation and Configuration
+## Geth installation and configuration
 
 We refer to the documentation below to install ```geth```.
 
@@ -84,8 +98,8 @@ accounts created.
 
 Important is moreover to underline the choice of the
 ```rpcport```. This is important to remember for the web3 connection
-to the running node. Important is moreover to choose for the
-communications a port that is not in use and will not inhibit the
+to the running node. Important is moreover to choose a port for the
+communications that is not in use and will not inhibit the
 smooth communication with other networks.
 
 Finally, the ```bootnodes``` parameter is of first order
@@ -103,12 +117,12 @@ command and entering corresponding passwords.
 geth --datadir=~/.ethereum account new
 ```
 
-## Python Configuration
+## Python configuration
 
 Once ```geth``` is properly configured we turned to the python
 dependencies and modules downloads.
 
-Firstly we created python virtual environment where to download and
+Firstly, we created python virtual environment where to download and
 save the packages of use.
 
 ```
@@ -131,7 +145,7 @@ $ pip3 install time    // For the time.sleep function in order to wait for the n
 $ pip3 install python-forecastio // to use darkspy API and download weather data.
 ```
 
-The python-solidity compiler package is dependent on the solidity
+The python-solidity compiler package is dependent on the Solidity
 compiler on your local machine. You can choose the compiler version
 from one of the options available at [Solidity
 Compilers](https://solidity.readthedocs.io/en/v0.5.3/installing-solidity.html).
@@ -147,9 +161,9 @@ python -m solc.install v0.4.25
 cp $HOME/.py-solc/solc-v0.4.25/bin/solc ~/venv/bin/       // copy the downloaded compiler to the virtual environment so that it is accessible.
 ```
 
-## Solidity Code
+## Solidity code
 
-The three Solidity scripts that backs our program are available under
+The three Solidity scripts that back our program are available under
 the ```src/sol``` repository in this Github page.
 
 The lower temperature script is the script to transfer Ether to an
@@ -163,7 +177,7 @@ temperature.
 Both are straightforward and an explanation of code is omitted.
 
 The auction script is a revised version of the auction program
-available at the official Solidity tutorial page
+available at the official Solidity tutorial page.
 
 __________
 [Simple Auction](https://solidity.readthedocs.io/en/v0.4.21/solidity-by-example.html)
@@ -183,7 +197,7 @@ ___________________
 
 We decided to connect through the HTTP mode by connecting to the
 ```rpcport```. If you are running the python script on the same
-machine where your node is running it is then possible to connect on
+machine where your node is running, it is then possible to connect on
 the ```127.0.0.1``` localhost, otherwise the IP of the machine running
 the node should be specified.
 
