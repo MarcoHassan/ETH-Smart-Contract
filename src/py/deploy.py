@@ -158,6 +158,8 @@ while ended == False:
 ## Deploy existent contract on the blockchain given the 'abi' ##
 ## description and the contract 'address'                     ##
 ################################################################
+# Once auction is ended and winner is set
+
 
 # Parse weather_contract dictionary to .json file
 with open('/home/mhassan/Scrivania/ETH-Solidity/json/lower_weather_transfer.json', 'r') as infile:
@@ -211,15 +213,4 @@ web3.eth.getBalance(web3.eth.accounts[1])
 # web3.eth.getBalance(web3.eth.accounts[0])
 # web3.eth.getBalance(web3.eth.accounts[1])
 #
-##################
-### Bid Example ##
-##################
-#
-# txn = auction_con.functions.bid().buildTransaction({'from': web3.eth.accounts[1],
-#                                                    'value': web3.toWei(1, 'ether'),
-#                                                    'gas': 3000000,
-#                                                    'chainId': 4,
-#                                                    'nonce': web3.eth.getTransactionCount(web3.eth.accounts[1])})
-#
-#signed = web3.eth.account.signTransaction(txn, private_key_account2)
-#txn_hash = web3.eth.sendRawTransaction(signed.rawTransaction)
+
