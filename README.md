@@ -115,8 +115,7 @@ __________
 __________
 
 ## Personal Ethereum Prerequisites
-Two wallets on the rinkeby network are needed to fully run this project. A folder named ```keystore``` on the main project level, where all other folders are, needs to be created and the two keystore files (“UTC---.3as45sdf8977…") have to be placed inside. Further, the full keystore filename of the wallet you wish to use as the auctioneer account needs to be defined in the three main python code (described further below) as ```auctioneerKeystoreFile``` and the one of the wallet you wish to use as the bidder needs to be defined in ```Bid.py``` as ```bidderKeystoreFile```.
-It is also necessary to create a ```wallet.json``` in the json folder and insert the passwords enable the code the decryption of  the private keys later. The file has to look as follows:
+Two wallets on the rinkeby network are needed to fully run this project. A folder named ```keystore``` on the main project level, where all other folders are, needs to be created and the two keystore files (“UTC---.3as45sdf8977…") have to be placed inside. Further, the full keystore filename of the wallet you wish to use as the auctioneer account needs to be defined in the three main python code (described further below) as ```auctioneerKeystoreFile``` and the one of the wallet you wish to use as the bidder needs to be defined in ```Bid.py``` as ```bidderKeystoreFile```. It is also necessary to create a ```wallet.json``` in the json folder and insert the passwords to enable the code the decryption of  the private keys later. The file has to look as follows:
 ```
 {"Account1_PSSWD": "auctioneerPW", "Account2_PSSWD": "bidderPW"}
 ```
