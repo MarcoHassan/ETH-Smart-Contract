@@ -20,12 +20,12 @@ class Node():
         keystorePath = os.path.join(projectRoot, 'keystore', keystoreFile)
 
         with open(walletPath, "r") as file:
-            walletJson = json.load(file)[passwordAccount]
+            walletJson = json.load(file)
 
         with open(keystorePath) as keyfile:
             keystoreFile = keyfile.read()
 
-        privateKey = self.web3.eth.account.decrypt(keystoreFile, walletJson['Password'])
+        privateKey = self.web3.eth.account.decrypt(keystoreFile, walletJson[passwordAccount])
 
         return self.web3.eth.account.privateKeyToAccount(privateKey)
 
