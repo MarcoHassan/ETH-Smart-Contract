@@ -12,29 +12,20 @@ University of St. Gallen, 05.05.2019
 # Ethereum Project
 
 **Elisa Fleissner** &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  elisa.fleissner@student.unisg.ch <br>
-**Marco Hassan** &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  ... <br>
+**Marco Hassan** &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  marco.hassan@student.unisg.ch <br>
 **Lars Stauffenegger** &nbsp; &nbsp; &nbsp;lars.stauffenegger@student.unisg.ch  <br>
-**Alexander Steeb** &nbsp;&nbsp; &nbsp; &nbsp; ...  <br>
+**Alexander Steeb** &nbsp;&nbsp; &nbsp; &nbsp; alexander.steeb@student.unisg.ch  <br>
 
 ## Introduction and project overview
-In the project we decided to create an auction contract where people
-can bid to get the right on a 0.5 Ethereum transfer if the realized
-temperature in ```Rome``` is higher than the perceived temperature in
-the same city at a given hour.
+In the project we decided to create an auction contract where people can bid to get the right on a 0.5 Ethereum transfer if the realized temperature in ```Rome``` is higher than the perceived temperature in the same city at a given hour.
 
-In order to implement the above we leverage the **Solidity**
-language to write two smart contracts, one defining the conditions of
-the auction and a second to define the 0.5 Ethereum transfer to the
-auction higher bidder.  Moreover we leverage ```python scripts``` in
-order to connect to the Ethereum blockchain through the ```web3.js``` API.
+In order to implement the above we leverage the **Solidity** language to write two smart contracts, one defining the conditions of the auction and a second to define the 0.5 Ethereum transfer to the auction higher bidder.  Moreover we leverage ```python scripts``` in order to connect to the Ethereum blockchain through the ```web3.py``` API. We tested and developed on Linux, Mac  and Windows environments using both local and hosted nodes.
 
-In the specific the project structure can be summarized as follows and
-will be explained in detail in the sections below:
+In the specific the project structure can be summarized as follows and will be explained in detail in the sections below:
 
-1. Install ```geth```, run an node on the rinkeby testnet and create accounts.
+1. Install ```geth``` or setup an ```infura``` account, run a node on the rinkeby testnet and create accounts.
 
-2. Get an API key from ```darkspy``` to withdraw actual and perceived
-weather information at a chosen location and install further python packages.
+2. Get an API key from ```darkspy``` to withdraw actual and perceived weather information at a chosen location and install further python packages.
 
 3. Write Solidity scripts.
 
@@ -58,13 +49,13 @@ Explanation omitted. It will follow in the next sections.
 #### Step 1: Deploy the weather smart contracts
 
 ```
-(virtual environment).../src/py$ python3 weather.py
+(virtual environment).../src/py$ python3 WeatherTransfer.py
 ```
 
 #### Step 2: Activate the auction
 
 ```
-(virtual environment)..../src/py$ python3 auction.py
+(virtual environment)..../src/py$ python3 AuctionSetup.py
 ```
 
 #### Step 3: Wait for bidding time of the auction
@@ -72,10 +63,10 @@ Explanation omitted. It will follow in the next sections.
 #### Step 4: Automatically transfer 0.5 Ether if condition fulfilled to the highest bidder
 
 ```
-(virtual environment)..../src/py$ python3 deploy.py
+(virtual environment)..../src/py$ python3 RunAuction.py
 ```
 
-## Geth installation and configuration
+## Local Node: Geth installation and configuration
 
 We refer to the documentation below to install ```geth```.
 
@@ -117,20 +108,28 @@ command and entering corresponding passwords.
 geth --datadir=~/.ethereum account new
 ```
 
+## Hosted Node: Infura
+As an alternative to Geth, we also used the infura API to connect to a hosted node. Under the below link one can register for free to get a personal API key in form of a URL.
+__________
+[Infura Register](https://infura.io/register)
+__________
+
+## Personal Ethereum Prerequisites
+Two wallets on the rinkeby network are needed to fully run this project. A folder named ```keystore``` on the main project level, where all other folders are, needs to be created and the two keystore files (“UTC---.3as45sdf8977…") have to be placed inside. Further, the full keystore filename of the wallet you wish to use as the auctioneer account needs to be defined in the three main python code (described further below) as ```auctioneerKeystoreFile``` and the one of the wallet you wish to use as the bidder needs to be defined in ```Bid.py``` as ```bidderKeystoreFile```.
+It is also necessary to create a ```wallet.json``` in the json folder and insert the passwords enable the code the decryption of  the private keys later. The file has to look as follows:
+```
+{"Account1_PSSWD": "auctioneerPW", "Account2_PSSWD": "bidderPW"}
+```
+
 ## Python configuration
 
-Once ```geth``` is properly configured we turned to the python
-dependencies and modules downloads.
-
-Firstly, we created python virtual environment where to download and
-save the packages of use.
+Once either ```geth``` is properly configured or an infura account has been created, we turn to the python dependencies and modules downloads. Firstly, we create a python virtual environment where to download and save the packages of use.
 
 ```
 $ virtualenv -p /usr/bin/python3.6 venv
 ```
 
-It is then possible to activate the virtual environment and download
-the dependencies
+It is then possible to activate the virtual environment and download the dependencies
 
 ```
 $ source venv/bin/activate
@@ -145,15 +144,9 @@ $ pip3 install time    // For the time.sleep function in order to wait for the n
 $ pip3 install python-forecastio // to use darkspy API and download weather data.
 ```
 
-The python-solidity compiler package is dependent on the Solidity
-compiler on your local machine. You can choose the compiler version
-from one of the options available at [Solidity
-Compilers](https://solidity.readthedocs.io/en/v0.5.3/installing-solidity.html).
+The python-solidity compiler package is dependent on the Solidity compiler on your local machine. You can choose the compiler version from one of the options available at [SolidityCompilers](https://solidity.readthedocs.io/en/v0.5.3/installing-solidity.html). To make the ```solc``` package work properly, we recommend checking all [prerequisites](https://solidity.readthedocs.io/en/v0.4.24/installing-solidity.html) have been installed as especially for Windows there are C++ build tool required.
 
-Important is however to notice that py-solc cannot synchronize with
-the newest Solidity compilers. We decided therefore to download the
-version 4.0.25 of the solidity compiler which is compatible with
-py-solc.
+Important is however to notice that py-solc cannot synchronize with the newest Solidity compilers. We decided therefore to download the version 4.0.25 of the solidity compiler which is compatible with py-solc.
 
 ```
 python -m solc.install v0.4.25
@@ -163,18 +156,9 @@ cp $HOME/.py-solc/solc-v0.4.25/bin/solc ~/venv/bin/       // copy the downloaded
 
 ## Solidity code
 
-The three Solidity scripts that back our program are available under
-the ```src/sol``` repository in this Github page.
+The three Solidity scripts that back our program are available under the ```src/sol``` repository in this Github page.
 
-The lower temperature script is the script to transfer Ether to an
-account to be specified if the the realized temperature in a selected
-location is smaller-equal than the perceived one.
-
-The higher temperature script is the analogy of the first and transfers
-Ether just when the perceived temperature is lower than the realized
-temperature.
-
-Both are straightforward and an explanation of code is omitted.
+The lower temperature script is the script to transfer Ether to an account to be specified if the the realized temperature in a selected location is smaller-equal than the perceived one. The higher temperature script is the analogy of the first and transfers Ether just when the perceived temperature is lower than the realized temperature. Both are straightforward and an explanation of code is omitted.
 
 The auction script is a revised version of the auction program
 available at the official Solidity tutorial page.
@@ -184,7 +168,7 @@ __________
 __________
 
 
-## Connection to Geth node
+## Connection To node
 
 At this stage all of the necessary libraries are downloaded and the solidity scripts available.
 
@@ -195,38 +179,44 @@ ___________________
 [Documentation for node concussion](https://web3py.readthedocs.io/en/stable/providers.html#choosing-provider)
 ___________________
 
-We decided to connect through the HTTP mode by connecting to the
-```rpcport```. If you are running the python script on the same
-machine where your node is running, it is then possible to connect on
-the ```127.0.0.1``` localhost, otherwise the IP of the machine running
-the node should be specified.
+For Geth We decided to connect through the HTTP mode by connecting to the ```rpcport```. If you are running the python script on the same machine where your node is running, it is then possible to connect on the ```127.0.0.1``` localhost, otherwise the IP of the machine running the node should be specified.
 
 ```
-web3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8080"))
+conn = "http://127.0.0.1:8080" 
+or 
+conn = "https://rinkeby.infura.io/v3/133f7cb05007sdf987sdrr3d64fcd6"
+self.web3 = Web3(Web3.HTTPProvider(conn))
 ```
 
-Once we are connected to the Ethereum blockchain node it is possible
-to interact with it through the web3 API.
-
-We extract first the private keys of the two accounts in order to
-authenticate and interact with the Rinkeby node and authorize
-transactions.
+Once we are connected to the Ethereum blockchain node it is possible to interact with it through the web3 API.
 
 _________________________________
 [Source decipher your private key](https://web3py.readthedocs.io/en/stable/web3.eth.account.html)
 ________________________________
 
+We extract first the private keys of the two accounts in order to authenticate and interact with the Rinkeby node and authorize
+transactions. As this is something we have to do multiple times in different scripts we decided to write a function in a class file to make it easily reusable.
+
 ```
-with open('~/.ethereum/rinkeby/keystore/<Account encrypted key; i.e. UTC--2019-03-30T11-11-56.210678255Z--903935ee0a8ed552d50523ebf465a8025c75c4cb>') as keyfile:
-    encrypted_key = keyfile.read()
-    private_key_account1 = w3.eth.account.decrypt(encrypted_key, 'YOUR ACCOUNT PSSWD')
+    def _getPrivateAccount(self, projectRoot, keystoreFile, passwordAccount):
+
+        walletPath = os.path.join(projectRoot, 'json', 'wallet.json')
+        keystorePath = os.path.join(projectRoot, 'keystore', keystoreFile)
+
+        with open(walletPath, "r") as file:
+            walletJson = json.load(file)
+
+        with open(keystorePath) as keyfile:
+            keystoreFile = keyfile.read()
+
+        privateKey = self.web3.eth.account.decrypt(keystoreFile, walletJson[passwordAccount])
+
+        return self.web3.eth.account.privateKeyToAccount(privateKey)
 ```
 
 ## Python Scripts
 
-This section briefly introduces and comments the python scripts
-necessary for running the auction and automatically transfer the coins
-to the highest bidder. We wrote two class -- ```EthNode.py``` and ```Logger.py``` -- that allow us to reuse the connection object and the log handling and for all three main scripts which are described below.
+This section briefly introduces and comments the python scripts necessary for running the auction and automatically transfer the coins to the highest bidder. We wrote two class -- ```EthNode.py``` and ```Logger.py``` -- that allow us to reuse the connection object and the log handling and for all three main scripts which are described below.
 
 #### Python Script 1 - Weather Conditional ETH Transfer Contracts
 
@@ -252,90 +242,54 @@ The two can be adjusted from the user and it is also possible to slightly alter 
 #### Python Script 3 - Running an Auction with automatic Transfer
 This will open the .json files where the auction contract address and ```abi``` documentation is saved, open such contract in web3 and check whether the auction is finished or running. Once the auction is terminated it will take the saved highest bidder address and automatically transfer 0.5 ```Ether``` from the actioneer's account to the address if the actual temperature in Rome is smaller equal than the ```perceived``` one. Finally the beneficiary of the auction, will receive the highest bid from the highest bidder address.
 
-The contract uses the difference between the perceived and realized temperature in Rome which is collected from weather forecast servers via **darkspy weather API**.
-
-
-#### Bid Example
-## It consists of a simple
-function defining an 1 ether transfer between the accounts.
-The structure to operate via web3 API on the Ethereum blockchain is
-simple. We defined first a ```txn_dict``` python dictionary where we specified the parameters of the transaction, such as the amount of ```ether``` to transfer, the gas price for the fast execution of the contract, the gas limit etc. Especially important is to set the ```chainid``` correctly. A list referencing ```chainid``` is available at [ChainIDlink](https://ethereum.stackexchange.com/questions/17051/how-to-select-a-network-id-or-is-there-a-list-of-network-ids). In our case as we work on ```Rinkeby``` test network we selected a ```chainid``` of 4.
-
-Once the dictionary is properly defined we authenticate the transaction through the sender ```privateKey``` previously stored and deploy the transaction on the blockchain through the ```web3.eth.sendRawTransaction()``` function saving moreover the
-transaction hash in order to inspect the transaction at a later point on ```rinkeby explorer```. The final loop waits until the transaction has been mined and returns and error if the mining was unsuccessful.
-........
-
-Once the auction is running it is possible for the owner of the
-contract to make the ```abi``` and ```address``` publicly available
-such that people can connect to it and place bids.
-
-Below is a python code example for placing such bids once the
-connection to the ethereum blockchain has been established and the
-contract successfully opened under the name of ```auction_con```.
-
-```
- txn = auction_con.functions.bid().buildTransaction({'from': web3.eth.accounts[1],
-                                                    'value': web3.toWei(1, 'ether'),
-                                                    'gas': 3000000,
-                                                    'chainId': 4,
-                                                    'nonce': web3.eth.getTransactionCount(web3.eth.accounts[1])})
-
-signed = web3.eth.account.signTransaction(txn, private_key_account2)
-txn_hash = web3.eth.sendRawTransaction(signed.rawTransaction)
-```
-
-#### Python Script 3 - ETH automatic transfer
-
-
-#### Darkspy API - comment
-
-In order to leverage the darkspy API and download weather data it is necessary to register and obtain an API key.
-
+The contract uses the difference between the perceived and realized temperature in Rome which is collected from weather forecast servers via **darkspy weather API**. 
 ______________
 [darkspy API](https://darksky.net/dev)
 ______________
 
-Given the API it is possible to simply withdraw the data inserting the
-coordinates for the city of interest and save the current realized and
-perceived weather.
+Given the API it is possible to simply withdraw the data inserting the coordinates for the city of interest and save the current realized and perceived weather.
 
 ```
 # Insert the coordinates of the city of choice. (Here Rome (IT)).
 lat = 41.89193
 lng = 12.51133
 
-forecast = forecastio.load_forecast(dark_api_key, lat, lng)
-
-current_weather = forecast.currently()
+current_weather = forecastio.load_forecast(dark_api_key, lat, lng).currently()
 
 # As solidity language does not support floaters to guarantee consistency among the blocks multiply the number by 100 to always obtain integers.
-temp = current_weather.temperature * 100
+temp = int(current_weather.temperature * 100)
+apparent_temp = int(current_weather.apparentTemperature * 100)
 
-apparent_temp = current_weather.apparentTemperature * 100
 ```
+
+
+#### Python Script 4 - Bidding
+Once the auction is running it is possible for the owner of the contract to make the ```abi``` and ```address``` publicly available such that people can connect to it and place bids. Below is a python code example for placing such bids once the
+connection to the ethereum blockchain has been established and the contract successfully opened under the name of ```auction_con```.
+
+```
+txn = auction_con.functions.bid().buildTransaction({'from': bidderPrivateAccount.address,
+                                                    'value': node.web3.toWei(0.001, 'ether'),
+                                                    'gas': 3000000,
+                                                    'chainId': 4,
+                                                    'nonce': node.web3.eth.getTransactionCount(bidderPrivateAccount.address)})
+
+signed = bidderPrivateAccount.signTransaction(txn)
+txn_hash = node.web3.eth.sendRawTransaction(signed.rawTransaction)
+```
+
+As an appendix to the bidding code, we provide a simple function which can be used to send ETH from one account to another. It is handy to use with manual inputs when testing the auction with two accounts to make sure there is the funds are allocated as needed. The structure to send ETH via web3 API on the Ethereum blockchain is simple. We defined first a ```txn_dict``` python dictionary where we specified the parameters of the transaction, such as the amount of ```ether``` to transfer, the gas price for the fast execution of the contract, the gas limit etc. Especially important is to set the ```chainid``` correctly. A list referencing ```chainid``` is available at [ChainIDlink](https://ethereum.stackexchange.com/questions/17051/how-to-select-a-network-id-or-is-there-a-list-of-network-ids). In our case as we work on ```Rinkeby``` test network we selected a ```chainid``` of 4.
+
+Once the dictionary is properly defined we authenticate the transaction through the sender ```privateKey``` previously stored and deploy the transaction on the blockchain through the ```web3.eth.sendRawTransaction()``` function saving moreover the
+transaction hash in order to inspect the transaction at a later point on ```rinkeby explorer```. The final loop waits until the transaction has been mined and returns and error if the mining was unsuccessful.
 
 ## Final comments and ideas
 
-To fully appreciate the project we recommend to run ```geth``` node on
-a server such that it will be running 24/7 and to instruct a few
-cronjobs to instantiate the auction and automatically transfer the
-coins.
+To fully appreciate the project we recommend to run ```geth``` node on a server such that it will be running 24/7 and to instruct a few cronjobs to instantiate the auction and automatically transfer the coins.
 
-For instance, we firstly executed the ```weather.py``` on the server
-as the script needs to run just a single time. We then set up two cron
-jobs, one instantiating the auction by running the ```auction.py```
-script at noon.And another cron job running the ```deploy.py```
-contract at midnight.
+For instance, we firstly executed the ```WeatherTransfer.py``` on the server as the script needs to run just a single time. We then set up two cron jobs, one instantiating the auction by running the ```AuctionSetup.py``` script at noon. And another cron job running the ```RunAuction.py``` contract at midnight.
 
-In this case each day an auction will be instantiated at noon running
-for three hours where people can place bids to get the right on the
-0.5 Ether transfer. Moreover the deploy script will run at noon
-checking if the difference of realized and perceived temperature in
-Rome is positive and automatically transferring the coins if the
-condition of the contract is fulfilled.
+In this case each day an auction will be instantiated at noon running for three hours where people can place bids to get the right on the 0.5 Ether transfer. Moreover the deploy script will run at noon checking if the difference of realized and perceived temperature in Rome is positive and automatically transferring the coins if the condition of the contract is fulfilled.
 
-It is clear that the project above is highly scalable. It is
-theoretically possible to slightly alter the above and easily shift
-the ```sports bids``` on the blockchain. A little bit of front-end
-development would then make the whole user friendly and potentially
-appetible to the general public.
+It is clear that the project above is highly scalable. It is theoretically possible to slightly alter the above and easily shift
+the ```sports bids``` on the blockchain. A little bit of front-end development would then make the whole user friendly and potentially appetible to the general public.
