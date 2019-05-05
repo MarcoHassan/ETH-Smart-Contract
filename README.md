@@ -228,47 +228,32 @@ This section briefly introduces and comments the python scripts
 necessary for running the auction and automatically transfer the coins
 to the highest bidder. We wrote two class -- ```EthNode.py``` and ```Logger.py``` -- that allow us to reuse the connection object and the log handling and for all three main scripts which are described below.
 
-#### Python Script 1 - ETH Conditional Transfer Contracts
+#### Python Script 1 - Weather Conditional ETH Transfer Contracts
 
 The smart contract to deploy the ETH conditional transfer is compiled
 and deployed in the ```WeatherTransfer.py``` script. In a first step, we establish a conenction via a node (local or hosted) that allows us to interact with the blockchain. We then start the deployment on the blockchain of the two weather contracts conditionally transferring money depending on the difference between the two input parameters. This is done by compiling the contract at first via the ```compile_files``` function imported from the ```py-solc``` library. This will result in the ```abi``` .json specification of the various contracts implemented in the Solidity script and their corresponding bytecodes necessary for running the contracts through ```EVM```. Given the byte code and the abi description it was then possible to
 deploy the contract on the blockchain by leveraging web3 API function ```web3.eth.contract()```.
 
-From here on the passages are analogous to the one previously mentioned in the case of the simple ether transfer with the difference that the parameters of the transaction are specified when constructing
-the contract through the ```<contract
-name>.constructor().buildTransaction()``` web3 function.
+Here the contract is constructed through the ```<contractname>.constructor().buildTransaction()``` web3 function and the ```abi``` and the ```address``` of the deployed function are saved in a created .json file to interact at a later stage from a different code - i.e. when the auction will be instantiated and finished. These contracts can be reused and for any other auction following the same payout logic and do not need to be recreated unless one looses the address or the abi to interact with it.
 
-Finally, we decide to save the ```abi``` and the ```address``` of the
-deployed function in a created .json file to call the functions of the
-contracts at a later stage - i.e. when the auction will be
-instantiated and finished -.
+#### Python Script 2 - Auction Contract
 
-#### Python Script 2 - Auction Initialization
-
-This second script initializes the auction. This means that running
-the script from the shell you will instantiate a auction for bidding
-on the 0,5 ETH transfer conditional on the weather conditions.
-
-The default parameters set in the script are the following:
+This second script ```AuctionSetup.py``` sets the auction contract up in the blockchain. This means that running the script from the shell will instantiate an auction for bidding on the 0,5 ETH transfer conditional on the weather conditions. The default parameters set in the script are the following:
 
 ____________
-beneficiary = first account on the running geth node.
+beneficiary = auctioneer account
 
 bidding time = three hours
 _____________
 
 
-The two can be adjusted from the user and it is also possible to
-slightly alter the script to allow parameter definition in the shell
-execution of the program.
+The two can be adjusted from the user and it is also possible to slightly alter the script to allow parameter definition in the shell execution of the program. The code is analogous to the one explained in the previous section and a detailed explanation of such is omitted. It is important moreover to save the ```abi``` and the ```address``` of the contract as in the previous case to interact with the auction contract, place bids, withdraw the bids and terminate the contract once the bidding time has expired. This contract is only usable exactly for this auction as it will be set to ```ended = True ``` once the bidding time is over. In contrast to the weather transfer contracts, this one here needs to be rerun to start a new auction.
 
-The code is analogous to the one explained in the previous section and
-a detailed explanation of such is omitted.
+#### Python Script 3 - Running an Auction with automatic Transfer
+This will open the .json files where the auction contract address and ```abi``` documentation is saved, open such contract in web3 and check whether the auction is finished or running. Once the auction is terminated it will take the saved highest bidder address and automatically transfer 0.5 ```Ether``` from the actioneer's account to the address if the actual temperature in Rome is smaller equal than the ```perceived``` one. Finally the beneficiary of the auction, will receive the highest bid from the highest bidder address.
 
-It is important moreover to save the ```abi``` and the ```address```
-of the contract as in the previous case to interact with the auction
-contract, place bids, withdraw the bids and terminate the contract
-once the bidding time has expired.
+The contract uses the difference between the perceived and realized temperature in Rome which is collected from weather forecast servers via **darkspy weather API**.
+
 
 #### Bid Example
 ## It consists of a simple
@@ -301,26 +286,6 @@ txn_hash = web3.eth.sendRawTransaction(signed.rawTransaction)
 
 #### Python Script 3 - ETH automatic transfer
 
-Once the auction is running it is possible to run this final script.
-
-This will open the .json files where the auction contract address and
-```abi``` documentation is saved, open such contract in web3 and check
-whether the auction is finished or running.
-
-Once the auction is terminated it will take the saved highest bidder
-address and automatically transfer 0.5 ```Ether``` from the geth node
-first account to the address if the actual temperature in Rome is
-smaller equal than the ```perceived``` one. Finally the beneficiary of
-the auction, will receive the highest bid from the highest bidder
-address.
-
-As such contract leverages the difference between the perceived and
-realized temperature in Rome it is necessary to collect the
-information on python.
-
-We decided to gather the information by connecting through the
-**darkspy weather API** to the weather forecast servers and get the
-information of interest.
 
 #### Darkspy API - comment
 
