@@ -231,38 +231,10 @@ to the highest bidder. We wrote two class -- ```EthNode.py``` and ```Logger.py``
 #### Python Script 1 - ETH Conditional Transfer Contracts
 
 The smart contract to deploy the ETH conditional transfer is compiled
-and deployed in the ```WeatherTransfer.py``` script. In a first step, we establish a conenction via a node (local or hosted) that allows us to interact with the blockchain. The structure to operate via web3 API on the Ethereum blockchain is
-simple. We defined first a ```txn_dict``` python dictionary where we specified the parameters of the transaction, such as the amount of ```ether``` to transfer, the gas price for the fast execution of the contract, the gas limit etc. Especially important is to set the ```chainid``` correctly. A list referencing ```chainid``` is available at [ChainIDlink](https://ethereum.stackexchange.com/questions/17051/how-to-select-a-network-id-or-is-there-a-list-of-network-ids). In our case as we work on ```Rinkeby``` test network we selected a ```chainid``` of 4.
+and deployed in the ```WeatherTransfer.py``` script. In a first step, we establish a conenction via a node (local or hosted) that allows us to interact with the blockchain. We then start the deployment on the blockchain of the two weather contracts conditionally transferring money depending on the difference between the two input parameters. This is done by compiling the contract at first via the ```compile_files``` function imported from the ```py-solc``` library. This will result in the ```abi``` .json specification of the various contracts implemented in the Solidity script and their corresponding bytecodes necessary for running the contracts through ```EVM```. Given the byte code and the abi description it was then possible to
+deploy the contract on the blockchain by leveraging web3 API function ```web3.eth.contract()```.
 
-Once the dictionary is properly defined we authenticate the
-transaction through the sender ```privateKey``` previously stored and
-deploy the transaction on the blockchain through the
-```web3.eth.sendRawTransaction()``` function saving moreover the
-transaction hash in order to inspect the transaction at a later point
-on ```rinkeby explorer```.
-
-The final loop waits until the transaction has been mined and returns
-and error if the mining was unsuccessful.
-
-After this general exercise and the explanation of the most important
-web3 API functions we turned to the deployment on the blockchain of
-the two weather contracts conditionally transferring money depending on
-the difference between the two input parameters.
-
-This is done by compiling the contract at first via the
-```compile_files``` function imported from the ```py-solc```
-library. This will result in the ```abi``` .json specification of the
-various contracts implemented in the Solidity script and their
-corresponding bytecodes necessary for running the contracts through
-```EVM```.
-
-Given the byte code and the abi description it was then possible to
-deploy the contract on the blockchain by leveraging web3 API function
-```web3.eth.contract()```.
-
-From here on the passages are analogous to the one previously
-mentioned in the case of the simple ether transfer with the difference
-that the parameters of the transaction are specified when constructing
+From here on the passages are analogous to the one previously mentioned in the case of the simple ether transfer with the difference that the parameters of the transaction are specified when constructing
 the contract through the ```<contract
 name>.constructor().buildTransaction()``` web3 function.
 
@@ -301,6 +273,12 @@ once the bidding time has expired.
 #### Bid Example
 ## It consists of a simple
 function defining an 1 ether transfer between the accounts.
+The structure to operate via web3 API on the Ethereum blockchain is
+simple. We defined first a ```txn_dict``` python dictionary where we specified the parameters of the transaction, such as the amount of ```ether``` to transfer, the gas price for the fast execution of the contract, the gas limit etc. Especially important is to set the ```chainid``` correctly. A list referencing ```chainid``` is available at [ChainIDlink](https://ethereum.stackexchange.com/questions/17051/how-to-select-a-network-id-or-is-there-a-list-of-network-ids). In our case as we work on ```Rinkeby``` test network we selected a ```chainid``` of 4.
+
+Once the dictionary is properly defined we authenticate the transaction through the sender ```privateKey``` previously stored and deploy the transaction on the blockchain through the ```web3.eth.sendRawTransaction()``` function saving moreover the
+transaction hash in order to inspect the transaction at a later point on ```rinkeby explorer```. The final loop waits until the transaction has been mined and returns and error if the mining was unsuccessful.
+........
 
 Once the auction is running it is possible for the owner of the
 contract to make the ```abi``` and ```address``` publicly available
