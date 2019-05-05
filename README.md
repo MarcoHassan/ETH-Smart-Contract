@@ -226,31 +226,16 @@ with open('~/.ethereum/rinkeby/keystore/<Account encrypted key; i.e. UTC--2019-0
 
 This section briefly introduces and comments the python scripts
 necessary for running the auction and automatically transfer the coins
-to the highest bidder.
+to the highest bidder. We wrote two class -- ```EthNode.py``` and ```Logger.py``` -- that allow us to reuse the connection object and the log handling and for all three main scripts which are described below.
 
 #### Python Script 1 - ETH Conditional Transfer Contracts
 
 The smart contract to deploy the ETH conditional transfer is compiled
-and deployed in the ```weather.py``` script.
-
-We started the script with a general exercise to test the
-connection and the web3 API functions. It consists of a simple
-function defining an 1 ether transfer between the accounts.
-
-The structure to operate via web3 API on the Ethereum blockchain is
-simple. We defined first a ```txn_dict``` python dictionary where we
-specified the parameters of the transaction, such as the amount of
-```ether``` to transfer, the gas price for the fast execution of the
-contract, the gas limit etc.
-
-Especially important is to set the ```chainid``` correctly. A list
-referencing ```chainid``` is available at [ChainID
-link](https://ethereum.stackexchange.com/questions/17051/how-to-select-a-network-id-or-is-there-a-list-of-network-ids). In
-our case as we work on ```Rinkeby``` test network we selected a
-```chainid``` of 4.
+and deployed in the ```WeatherTransfer.py``` script. In a first step, we establish a conenction via a node (local or hosted) that allows us to interact with the blockchain. The structure to operate via web3 API on the Ethereum blockchain is
+simple. We defined first a ```txn_dict``` python dictionary where we specified the parameters of the transaction, such as the amount of ```ether``` to transfer, the gas price for the fast execution of the contract, the gas limit etc. Especially important is to set the ```chainid``` correctly. A list referencing ```chainid``` is available at [ChainIDlink](https://ethereum.stackexchange.com/questions/17051/how-to-select-a-network-id-or-is-there-a-list-of-network-ids). In our case as we work on ```Rinkeby``` test network we selected a ```chainid``` of 4.
 
 Once the dictionary is properly defined we authenticate the
-transaction through the sender ```private key``` previously stored and
+transaction through the sender ```privateKey``` previously stored and
 deploy the transaction on the blockchain through the
 ```web3.eth.sendRawTransaction()``` function saving moreover the
 transaction hash in order to inspect the transaction at a later point
@@ -314,6 +299,8 @@ contract, place bids, withdraw the bids and terminate the contract
 once the bidding time has expired.
 
 #### Bid Example
+## It consists of a simple
+function defining an 1 ether transfer between the accounts.
 
 Once the auction is running it is possible for the owner of the
 contract to make the ```abi``` and ```address``` publicly available
