@@ -17,7 +17,7 @@ projectRoot = Path(__file__).parents[2]
 auctioneerLog = Logger(projectRoot)
 
 ## Node Connection -> Hosted (via Port) or Local (via URL)
-conn = "https://rinkeby.infura.io/v3/133f7cb050074a1d93a87cc5fd64fcd6"      # "http://127.0.0.1:8080"
+conn = "https://rinkeby.infura.io/v3/1234567890DUMMY"      # "http://127.0.0.1:8080"
 node = Node(conn)
 auctioneerLog.logger.info(node.web3.isConnected())
 

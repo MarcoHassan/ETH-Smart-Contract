@@ -2,6 +2,11 @@
 import time
 from pathlib import Path
 import forecastio                # to use darkspy API and get current weather data
+
+## Make sure your virtual environment is in the right directory to download the python defined modules.
+import os
+os.chdir(Path(__file__).parents[0])
+
 from EthNode import *
 from Logger import *
 
@@ -12,7 +17,7 @@ projectRoot = Path(__file__).parents[2]
 auctionLog = Logger(projectRoot)
 
 ## Node Connection -> Hosted (via Port) or Local (via URL)
-conn = "https://rinkeby.infura.io/v3/133f7cb050074a1d93a87cc5fd64fcd6"      # "http://127.0.0.1:8080"
+conn = "https://rinkeby.infura.io/v3/1234567890DUMMY"      # "http://127.0.0.1:8080"
 node = Node(conn)
 auctionLog.logger.info(node.web3.isConnected())
 

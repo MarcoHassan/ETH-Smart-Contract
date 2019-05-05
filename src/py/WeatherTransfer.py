@@ -2,6 +2,11 @@
 import time
 from pathlib import Path
 from solc import compile_files   # to compile Solidity code.
+
+## Make sure your virtual environment is in the right directory to download the python defined modules.
+import os
+os.chdir(Path(__file__).parents[0])
+
 from EthNode import *
 from Logger import *
 
@@ -12,7 +17,7 @@ projectRoot = Path(__file__).parents[2]
 weatherLog = Logger(projectRoot)
 
 ## Node Connection -> Hosted (via Port) or Local (via URL)
-conn = "https://rinkeby.infura.io/v3/133f7cb050074a1d93a87cc5fd64fcd6"      # "http://127.0.0.1:8080"
+conn = "https://rinkeby.infura.io/v3/1234567890DUMMY"      # "http://127.0.0.1:8080"
 node = Node(conn)
 weatherLog.logger.info(node.web3.isConnected())
 
