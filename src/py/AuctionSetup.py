@@ -2,6 +2,11 @@
 import time
 from pathlib import Path
 from solc import compile_files   # to compile Solidity code.
+
+## Make sure your virtual environment is in the right directory to download the python defined modules.
+import os
+os.chdir(Path(__file__).parents[0])
+
 from EthNode import *
 from Logger import *
 
