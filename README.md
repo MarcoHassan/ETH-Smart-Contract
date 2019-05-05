@@ -12,9 +12,9 @@ University of St. Gallen, 05.05.2019
 # Ethereum Project
 
 **Elisa Fleissner** &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  elisa.fleissner@student.unisg.ch <br>
-**Marco Hassan** &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  ... <br>
+**Marco Hassan** &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  marco.hassan@student.unisg.ch <br>
 **Lars Stauffenegger** &nbsp; &nbsp; &nbsp;lars.stauffenegger@student.unisg.ch  <br>
-**Alexander Steeb** &nbsp;&nbsp; &nbsp; &nbsp; ...  <br>
+**Alexander Steeb** &nbsp;&nbsp; &nbsp; &nbsp; alexander.steeb@student.unisg.ch <br>
 
 ## Introduction and project overview
 In the project we decided to create an auction contract where people
