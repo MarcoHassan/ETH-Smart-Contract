@@ -37,3 +37,23 @@
 2019-05-05 15:27:35,439 (INFO) - True
 2019-05-05 15:28:03,612 (INFO) - Auction was opened
 2019-05-05 15:28:55,381 (INFO) - Weather Contracts deployed into Blockchain
+2019-05-05 16:51:28,989 (INFO) - True
+2019-05-05 16:53:31,642 (INFO) - True
+2019-05-05 16:54:25,711 (INFO) - True
+2019-05-05 16:54:36,561 (INFO) - True
+2019-05-05 16:55:04,111 (INFO) - Auction was opened
+2019-05-05 16:57:36,175 (INFO) - True
+2019-05-05 17:21:53,652 (INFO) - True
+2019-05-05 17:22:11,179 (INFO) - True
+2019-05-05 17:29:34,405 (INFO) - True
+2019-05-05 17:31:04,943 (INFO) - True
+2019-05-05 17:31:32,305 (INFO) - Auction was opened
+2019-05-05 17:45:18,721 (INFO) - True
+2019-05-05 17:45:46,197 (INFO) - Auction was opened
+2019-05-05 18:06:44,168 (INFO) - True
+2019-05-05 18:07:11,750 (INFO) - Auction was opened
+2019-05-05 18:11:03,070 (INFO) - True
+2019-05-05 18:11:08,078 (INFO) - Highest bidder and amount: 0x0000000000000000000000000000000000000000, 0x0000000000000000000000000000000000000000
+2019-05-05 18:29:01,640 (INFO) - Actual temperature in Rome is: 1255
+2019-05-05 18:29:03,746 (INFO) - Perceived temperature in Rome is: 1255
+2019-05-05 18:31:39,874 (INFO) - Weather Transfer Contract Executed.

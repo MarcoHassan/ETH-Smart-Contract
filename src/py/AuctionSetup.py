@@ -39,6 +39,7 @@ auctionDuration = 60*60*3
 
 construct_txn = contract.constructor(_biddingTime=auctionDuration, _beneficiary=auctioneerPrivateAccount.address).buildTransaction(
     {
+        'from': auctioneerPrivateAccount.address,
         'chainId': 4,
         'nonce': node.web3.eth.getTransactionCount(auctioneerPrivateAccount.address)
     })
@@ -63,45 +64,3 @@ with open(os.path.join(projectRoot, 'json', 'auction.json'), 'w') as outfile:
 auctioneerLog.logger.info("Auction was opened")
 
 
-# -------------------------------------------------------------
-## Create Weather Transfer Contracts in the Blockchain
-contracts = ['lower_Weather_transfer', 'higher_Weather_transfer']
-
-for contract in contracts:
-    jsonFile = '.'.join([contract, 'json'])
-    contractFilePath = os.path.splitdrive(os.path.join(projectRoot, 'src', 'sol', 'weather.sol'))[1]
-    contractDirectPath = contractFilePath + ':' + contract
-    # no colon ":" in Path (use "/Users/.." instead of "C:/Users/..." (https://github.com/ethereum/py-solc/issues/43)
-    contracts = compile_files([contractFilePath])
-
-    contract = node.web3.eth.contract(
-        abi=contracts[contractDirectPath]['abi'],
-        bytecode=contracts[contractDirectPath]['bin']
-    )
-
-    construct_txn = contract.constructor().buildTransaction(
-        {
-            'from': auctioneerPrivateAccount.address,
-            'chainId': 4,
-            'nonce': node.web3.eth.getTransactionCount(auctioneerPrivateAccount.address)
-        })
-
-    # Authenticate and Upload the smart contract
-    signed_txn = auctioneerPrivateAccount.signTransaction(construct_txn)
-    txn_hash = node.web3.eth.sendRawTransaction(signed_txn.rawTransaction)
-
-    # Wait for the mining and save the transaction hash where the contract will be deployed on the Blockchain
-    time.sleep(25)
-    txn_receipt = node.web3.eth.waitForTransactionReceipt(txn_hash)
-
-    # Save contract 'address',  'abi' and 'bytecode' deploying the contract at a later stage.
-    weather_contract = {}
-    weather_contract['abi'] = contracts[contractDirectPath]['abi']
-    weather_contract['address'] = txn_receipt.contractAddress
-
-    # Parse weather_contract dictionary to .json file
-
-    with open(os.path.join(projectRoot, 'json', jsonFile), 'w') as outfile:
-        json.dump(weather_contract, outfile)
-
-auctioneerLog.logger.info("Weather Contracts deployed into Blockchain")

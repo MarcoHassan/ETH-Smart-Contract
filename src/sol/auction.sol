@@ -104,7 +104,7 @@ contract SimpleAuction {
         return highestBidder;
     }
     
-    function highestBid() public view returns(address){
+    function highestBid_amount() public view returns(address){
         require(msg.sender == owner);
         return highestBidder;
     }
