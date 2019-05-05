@@ -14,22 +14,18 @@ class Node():
         #self.web3.eth.blockNumber
 
 
-    def _getPrivateAccount(self, projectRoot, keystoreFile):
+    def _getPrivateAccount(self, projectRoot, keystoreFile, passwordAccount):
 
         walletPath = os.path.join(projectRoot, 'json', 'wallet.json')
         keystorePath = os.path.join(projectRoot, 'keystore', keystoreFile)
 
         with open(walletPath, "r") as file:
-            walletJson = json.load(file)
+            walletJson = json.load(file)[passwordAccount]
 
         with open(keystorePath) as keyfile:
             keystoreFile = keyfile.read()
 
-        #self.address = Web3.toChecksumAddress('aec95ca51e1ebf239c634c3fbd8767274cc13b7f')
-        #private_key = web3.eth.account.privateKeyToAccount(private_key_account1)
-        #private_key.address
-
-        privateKey =  self.web3.eth.account.decrypt(keystoreFile, walletJson['Password'])
+        privateKey = self.web3.eth.account.decrypt(keystoreFile, walletJson['Password'])
 
         return self.web3.eth.account.privateKeyToAccount(privateKey)
 

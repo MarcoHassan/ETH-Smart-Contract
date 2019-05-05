@@ -5,7 +5,6 @@ from solc import compile_files   # to compile Solidity code.
 from EthNode import *
 from Logger import *
 
-
 # Specify path
 projectRoot = Path(__file__).parents[2]
 
@@ -21,7 +20,8 @@ auctionLog.logger.info(node.web3.isConnected())
 
 ## Get Private Key
 auctioneerKeystoreFile = 'UTC--2019-03-26T09-31-53.436597400Z--50fcc57020a3fcb02974ba0d615b76e7161f56dc'
-auctioneerPrivateAccount = node._getPrivateAccount(projectRoot, auctioneerKeystoreFile)
+account = 'AccountOne'        # Needs to match the Keyname of the Passwordvalue in the Wallet File and correspond to the Keystore file above
+auctioneerPrivateAccount = node._getPrivateAccount(projectRoot, auctioneerKeystoreFile, account)
 
 # -------------------------------------------------------------
 ## Create Auction Contract
