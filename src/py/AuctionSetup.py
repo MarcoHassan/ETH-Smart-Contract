@@ -17,7 +17,7 @@ node = Node(conn)
 auctioneerLog.logger.info(node.web3.isConnected())
 
 ## Get Private Key
-account = 'AccountOne'      # Needs to match the Keyname of the Passwordvalue in the Wallet File and correspond to the Keystore file below
+account = 'Account1_PSSWD'      # Needs to match the Keyname of the Passwordvalue in the Wallet File and correspond to the Keystore file below
 auctioneerKeystoreFile = 'UTC--2019-03-26T09-31-53.436597400Z--50fcc57020a3fcb02974ba0d615b76e7161f56dc'
 auctioneerPrivateAccount = node._getPrivateAccount(projectRoot, auctioneerKeystoreFile, account)
 
